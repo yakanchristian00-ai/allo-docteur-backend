@@ -1,0 +1,306 @@
+.dashboard {
+    max-width: 420px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: #F7F8FA;
+    padding-bottom: 90px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.dashboard-header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1A1F36;
+    margin: 0;
+}
+
+.dashboard-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #E5E9F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.dashboard-greeting {
+    padding: 0 20px;
+    margin-bottom: 16px;
+}
+
+.dashboard-greeting h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1A1F36;
+    margin: 0 0 4px 0;
+}
+
+.dashboard-greeting p {
+    color: #6B7280;
+    margin: 0;
+    font-size: 14px;
+}
+
+.btn-urgence {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: calc(100% - 40px);
+    margin: 0 20px 20px 20px;
+    padding: 16px;
+    background: linear-gradient(135deg, #EF4444, #DC2626);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.card {
+    background: white;
+    margin: 0 20px 16px 20px;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.card-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #2563EB;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.rdv-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rdv-info h3 {
+    margin: 6px 0 2px 0;
+    font-size: 17px;
+    color: #1A1F36;
+}
+
+.rdv-info p {
+    margin: 0 0 8px 0;
+    color: #6B7280;
+    font-size: 14px;
+}
+
+.rdv-time {
+    font-size: 13px;
+    color: #6B7280;
+}
+
+.rdv-date-badge {
+    background: #F1F5F9;
+    border-radius: 10px;
+    padding: 8px 12px;
+    text-align: center;
+    min-width: 50px;
+}
+
+.rdv-date-badge .mois {
+    font-size: 11px;
+    color: #EF4444;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.rdv-date-badge .jour {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1A1F36;
+}
+
+.btn-gerer {
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px;
+    background: #2563EB;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.sante-titre {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1A1F36;
+    margin-bottom: 8px;
+}
+
+.sante-score {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.sante-score .pourcentage {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1A1F36;
+}
+
+.sante-score .label {
+    font-size: 13px;
+    color: #6B7280;
+}
+
+.progress-bar {
+    height: 8px;
+    background: #E5E9F0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #2563EB;
+    border-radius: 10px;
+}
+
+.sante-note {
+    font-size: 12px;
+    color: #9CA3AF;
+    margin-top: 8px;
+    font-style: italic;
+}
+
+.section-title {
+    padding: 0 20px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1A1F36;
+    margin-bottom: 12px;
+}
+
+.quick-access {
+    display: flex;
+    gap: 12px;
+    padding: 0 20px;
+    margin-bottom: 20px;
+}
+
+.quick-item {
+    flex: 1;
+    background: white;
+    border-radius: 14px;
+    padding: 16px 8px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+    border: none;
+}
+
+.quick-item .icon {
+    width: 40px;
+    height: 40px;
+    background: #EFF4FF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 8px auto;
+    font-size: 18px;
+}
+
+.quick-item span {
+    font-size: 12px;
+    color: #374151;
+    font-weight: 500;
+}
+
+.article-card {
+    margin: 0 20px 20px 20px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.article-image {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+}
+
+.article-content {
+    padding: 14px 16px;
+}
+
+.article-tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: #2563EB;
+    text-transform: uppercase;
+}
+
+.article-content h3 {
+    font-size: 15px;
+    margin: 6px 0;
+    color: #1A1F36;
+}
+
+.article-content p {
+    font-size: 13px;
+    color: #6B7280;
+    margin: 0 0 8px 0;
+}
+
+.article-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2563EB;
+    text-decoration: none;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-top: 1px solid #EEF1F5;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #9CA3AF;
+    font-size: 11px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-item.active {
+    color: #2563EB;
+}
