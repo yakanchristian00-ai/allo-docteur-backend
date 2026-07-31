@@ -1,0 +1,323 @@
+* {
+    box-sizing: border-box;
+}
+
+.rdv-page {
+    max-width: 420px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: #F7F8FA;
+    padding-bottom: 95px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    position: relative;
+}
+
+.rdv-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #F7F8FA;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.rdv-header h1 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #2563EB;
+    margin: 0;
+}
+
+.rdv-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #E5E9F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.rdv-section {
+    padding: 0 20px;
+    margin-bottom: 18px;
+}
+
+.rdv-section h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1A1F36;
+    margin: 0 0 10px 0;
+}
+
+.rdv-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rdv-voir-tout {
+    color: #2563EB;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.rdv-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    border-radius: 12px;
+    padding: 14px 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.rdv-search select {
+    border: none;
+    outline: none;
+    font-size: 15px;
+    color: #1A1F36;
+    flex: 1;
+    background: transparent;
+    appearance: none;
+}
+
+.medecins-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 4px 2px 8px 2px;
+    scrollbar-width: thin;
+}
+
+.medecin-card {
+    min-width: 210px;
+    background: white;
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+    border: 2px solid transparent;
+    flex-shrink: 0;
+    transition: all 0.2s ease-in-out;
+}
+
+.medecin-card:hover {
+    border-color: #93C5FD;
+}
+
+.medecin-card.selected {
+    border-color: #2563EB;
+    background: #F0F6FF;
+}
+
+.medecin-top {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.medecin-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #E5E9F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.medecin-info h3 {
+    margin: 0;
+    font-size: 15px;
+    color: #1A1F36;
+    font-weight: 600;
+}
+
+.medecin-info p {
+    margin: 2px 0 0 0;
+    font-size: 12px;
+    color: #6B7280;
+}
+
+.medecin-slot {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #EFF4FF;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12px;
+    color: #2563EB;
+    font-weight: 600;
+}
+
+.dates-scroll {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 4px 2px 8px 2px;
+    scrollbar-width: thin;
+}
+
+.date-chip {
+    min-width: 62px;
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 14px;
+    padding: 10px 8px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.date-chip .jour-nom {
+    font-size: 12px;
+    color: #6B7280;
+    font-weight: 500;
+}
+
+.date-chip .jour-num {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1A1F36;
+    margin-top: 2px;
+}
+
+.date-chip.selected {
+    background: #2563EB;
+    border-color: #2563EB;
+}
+
+.date-chip.selected .jour-nom,
+.date-chip.selected .jour-num {
+    color: white;
+}
+
+.horaires-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.horaire-chip {
+    background: white;
+    border: 1.5px solid #2563EB;
+    border-radius: 12px;
+    padding: 10px 4px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2563EB;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.horaire-chip.selected {
+    background: #2563EB;
+    color: white;
+}
+
+.horaire-chip.disabled {
+    border-color: #E5E9F0;
+    color: #CBD5E1;
+    cursor: not-allowed;
+}
+
+.motif-textarea {
+    width: 100%;
+    min-height: 90px;
+    border: 1px solid #E5E7EB;
+    border-radius: 14px;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-family: inherit;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    resize: vertical;
+    outline: none;
+}
+
+.motif-textarea:focus {
+    border-color: #2563EB;
+}
+
+.btn-confirmer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: calc(100% - 40px);
+    margin: 16px 20px 0 20px;
+    padding: 16px;
+    background: #2563EB;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    transition: background 0.2s ease;
+}
+
+.btn-confirmer:hover:not(:disabled) {
+    background: #1D4ED8;
+}
+
+.btn-confirmer:disabled {
+    background: #9CA3AF;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-top: 1px solid #EEF1F5;
+    z-index: 100;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #9CA3AF;
+    font-size: 11px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-item.active {
+    color: #2563EB;
+    font-weight: 600;
+}
+
+@media (min-width: 480px) {
+    .rdv-page {
+        box-shadow: 0 20px 60px rgba(37, 99, 235, 0.15);
+        border-radius: 24px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
+    }
+}

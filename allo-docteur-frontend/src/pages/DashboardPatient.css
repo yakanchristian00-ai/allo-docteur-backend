@@ -304,3 +304,21 @@
 .nav-item.active {
     color: #2563EB;
 }
+
+@media (min-width: 480px) {
+    body {
+        background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 50%, #F3E8FF 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 40px 0;
+    }
+
+    .dashboard {
+        box-shadow: 0 20px 60px rgba(37, 99, 235, 0.15);
+        border-radius: 24px;
+        min-height: auto;
+        max-height: 900px;
+        overflow-y: auto;
+    }
+}
