@@ -1,0 +1,666 @@
+/* ==========================================================================
+   MES RENDEZ-VOUS - STYLES DE PAGE (PURE CSS)
+   Inspiré par Doctolib, Practo et Google Material Design 3
+   ========================================================================== */
+
+:root {
+    --bg-page: #F5F7FB;
+    --bg-card: #FFFFFF;
+    --primary-blue: #2563EB;
+    --primary-blue-hover: #1D4ED8;
+    --primary-blue-light: #EFF6FF;
+    --text-main: #1A1F36;
+    --text-muted: #6B7280;
+    --border-light: #E5E7EB;
+    
+    /* Couleurs de statut */
+    --status-confirme-bg: #E6F4EA;
+    --status-confirme-text: #0F9D58;
+    --status-attente-bg: #FEF3C7;
+    --status-attente-text: #D97706;
+    --status-termine-bg: #E0E7FF;
+    --status-termine-text: #1D4ED8;
+    --status-annule-bg: #FEE2E2;
+    --status-annule-text: #DC2626;
+
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
+    --shadow-hover: 0 12px 32px rgba(37, 99, 235, 0.12);
+    --radius-card: 16px;
+    --radius-chip: 24px;
+    --transition-fast: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mes-rdv-container {
+    min-height: 100vh;
+    background-color: var(--bg-page);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text-main);
+    padding-bottom: 60px;
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   1. EN-TÊTE DE LA PAGE
+   -------------------------------------------------------------------------- */
+.mes-rdv-header {
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--border-light);
+    padding: 24px 32px;
+    box-shadow: var(--shadow-sm);
+}
+
+.header-top {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.btn-back {
+    background: var(--bg-page);
+    border: 1px solid var(--border-light);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 20px;
+    color: var(--text-main);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.btn-back:hover {
+    background: var(--primary-blue-light);
+    color: var(--primary-blue);
+    border-color: var(--primary-blue);
+    transform: translateX(-2px);
+}
+
+.main-title {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: -0.5px;
+}
+
+.sub-title {
+    margin: 4px 0 0 0;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   2. CONTENU PRINCIPAL
+   -------------------------------------------------------------------------- */
+.mes-rdv-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* --------------------------------------------------------------------------
+   3. BARRE DE STATISTIQUES (4 CARTES)
+   -------------------------------------------------------------------------- */
+.stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-card);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(229, 231, 235, 0.6);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-blue);
+}
+
+.stat-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.stat-aujourdhui .stat-icon-wrapper { background: #EFF6FF; }
+.stat-avenir .stat-icon-wrapper { background: #FEF3C7; }
+.stat-termines .stat-icon-wrapper { background: #E6F4EA; }
+.stat-annules .stat-icon-wrapper { background: #FEE2E2; }
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1.1;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   4. BARRE DE RECHERCHE ET FILTRES
+   -------------------------------------------------------------------------- */
+.search-filter-bar {
+    background: var(--bg-card);
+    border-radius: var(--radius-card);
+    padding: 16px 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(229, 231, 235, 0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+@media (min-width: 768px) {
+    .search-filter-bar {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.search-input-wrapper {
+    position: relative;
+    flex: 1;
+    max-width: 460px;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    font-size: 16px;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 38px 12px 42px;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    background: #F9FAFB;
+    font-size: 14px;
+    color: var(--text-main);
+    outline: none;
+    transition: var(--transition-fast);
+}
+
+.search-input:focus {
+    background: #FFFFFF;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.search-clear {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.filter-chips {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+}
+
+.filter-chip {
+    background: #F3F4F6;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    padding: 8px 16px;
+    border-radius: var(--radius-chip);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: var(--transition-fast);
+}
+
+.filter-chip:hover {
+    background: #E5E7EB;
+    color: var(--text-main);
+}
+
+.filter-chip.active {
+    background: var(--primary-blue);
+    color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+/* --------------------------------------------------------------------------
+   5. GRILLE DES CARTES DE RENDEZ-VOUS (RESPONSIVE)
+   -------------------------------------------------------------------------- */
+.rdv-grid-section {
+    width: 100%;
+}
+
+.rdv-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+/* Tablette : 2 cartes par ligne */
+@media (min-width: 640px) {
+    .rdv-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Desktop : 3 cartes par ligne */
+@media (min-width: 1024px) {
+    .rdv-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Style d'une Carte Rendez-vous */
+.rdv-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-card);
+    padding: 22px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(229, 231, 235, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    transition: var(--transition-fast);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.rdv-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: rgba(37, 99, 235, 0.3);
+}
+
+.rdv-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    position: relative;
+}
+
+.doctor-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #EFF6FF;
+    flex-shrink: 0;
+}
+
+.doctor-meta {
+    flex: 1;
+    min-width: 0;
+}
+
+.specialite-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--primary-blue);
+    display: block;
+    margin-bottom: 2px;
+}
+
+.doctor-name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Badges de Statut Colores */
+.statut-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.badge-confirme {
+    background-color: var(--status-confirme-bg);
+    color: var(--status-confirme-text);
+}
+
+.badge-attente {
+    background-color: var(--status-attente-bg);
+    color: var(--status-attente-text);
+}
+
+.badge-termine {
+    background-color: var(--status-termine-bg);
+    color: var(--status-termine-text);
+}
+
+.badge-annule {
+    background-color: var(--status-annule-bg);
+    color: var(--status-annule-text);
+}
+
+/* Corps de la carte */
+.rdv-card-body {
+    background: #F9FAFB;
+    padding: 12px 14px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-main);
+}
+
+.row-icon {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.row-text {
+    font-weight: 500;
+}
+
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Actions au bas de la carte */
+.rdv-card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.btn-primary-rdv, .btn-secondary, .btn-danger {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    transition: var(--transition-fast);
+}
+
+.btn-primary-rdv {
+    background: var(--primary-blue);
+    color: #FFFFFF;
+}
+
+.btn-primary-rdv:hover {
+    background: var(--primary-blue-hover);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.btn-secondary {
+    background: #F3F4F6;
+    color: #374151;
+    border: 1px solid var(--border-light);
+}
+
+.btn-secondary:hover {
+    background: #E5E7EB;
+    color: #111827;
+}
+
+.btn-danger {
+    background: #FEE2E2;
+    color: #DC2626;
+}
+
+.btn-danger:hover {
+    background: #FCA5A5;
+    color: #991B1B;
+}
+
+/* État vide (Empty State) */
+.empty-rdv-state {
+    background: var(--bg-card);
+    border-radius: var(--radius-card);
+    padding: 48px 24px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+}
+
+.empty-illustration {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.empty-rdv-state h3 {
+    margin: 0 0 6px 0;
+    font-size: 18px;
+    color: var(--text-main);
+}
+
+.empty-rdv-state p {
+    margin: 0 0 20px 0;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   6. MODALE INTERACTIVE
+   -------------------------------------------------------------------------- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+    background: #FFFFFF;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 100%;
+    padding: 24px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    animation: scaleUp 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes scaleUp {
+    from {
+        transform: scale(0.92);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #F3F4F6;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.modal-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--text-main);
+}
+
+.modal-specialite {
+    margin: 2px 0 0 0;
+    font-size: 13px;
+    color: var(--primary-blue);
+    font-weight: 600;
+}
+
+.modal-body {
+    padding: 20px 0;
+}
+
+.section-subtitle {
+    font-size: 15px;
+    margin: 0 0 12px 0;
+    color: var(--text-main);
+}
+
+.section-subtitle.danger-text {
+    color: #DC2626;
+}
+
+.detail-item {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: var(--text-main);
+}
+
+.compte-rendu-box {
+    background: #F9FAFB;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #374151;
+}
+
+.modal-actions-confirm {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.btn-danger-confirm {
+    flex: 1;
+    background: #DC2626;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid var(--border-light);
+    padding-top: 16px;
+}
+
+/* --------------------------------------------------------------------------
+   7. ADAPTATION RESPONSIVE SUR PETITS ÉCRANS (MOBILE)
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+    .stats-bar {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .mes-rdv-header {
+        padding: 16px 20px;
+    }
+
+    .main-title {
+        font-size: 22px;
+    }
+
+    .mes-rdv-main {
+        padding: 16px;
+        gap: 20px;
+    }
+}

@@ -53,7 +53,7 @@ function DashboardPatient() {
                     <div className="jour">15</div>
                 </div>
             </div>
-            <button className="btn-gerer" style={{ margin: '-8px 20px 16px 20px', width: 'calc(100% - 40px)' }}>
+            <button className="btn-gerer" onClick={() => navigate('/mes-rendez-vous')} style={{ margin: '-8px 20px 16px 20px', width: 'calc(100% - 40px)' }}>
                 Gérer
             </button>
 
@@ -101,7 +101,7 @@ function DashboardPatient() {
 
             <div className="bottom-nav">
                 <button className="nav-item active">🏠<span>Accueil</span></button>
-                <button className="nav-item" onClick={() => navigate('/rendez-vous')}>📅<span>RDV</span></button>
+                <button className="nav-item" onClick={() => navigate('/mes-rendez-vous')}>📅<span>Mes RDV</span></button>
                 <button className="nav-item" onClick={() => navigate('/messages')}>💬<span>Messages</span></button>
                 <button className="nav-item" onClick={() => navigate('/profil')}>👤<span>Profil</span></button>
             </div>
