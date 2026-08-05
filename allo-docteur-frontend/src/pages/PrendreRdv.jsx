@@ -183,10 +183,22 @@ function PrendreRdv() {
             </button>
 
             <div className="bottom-nav">
-                <button className="nav-item" onClick={() => navigate('/dashboard-patient')}>🏠<span>Accueil</span></button>
-                <button className="nav-item active">📅<span>Rendez-vous</span></button>
-                <button className="nav-item" onClick={() => navigate('/dashboard-patient')}>💬<span>Messages</span></button>
-                <button className="nav-item" onClick={() => navigate('/dashboard-patient')}>👤<span>Profil</span></button>
+                <button className="nav-item" onClick={() => navigate('/dashboard-patient')}>
+                    <span className="nav-icon">🏠</span>
+                    <span className="nav-label">Accueil</span>
+                </button>
+                <button className="nav-item active" onClick={() => navigate('/mes-rendez-vous')}>
+                    <span className="nav-icon">📅</span>
+                    <span className="nav-label">Mes RDV</span>
+                </button>
+                <button className="nav-item" onClick={() => navigate('/messages')}>
+                    <span className="nav-icon">💬</span>
+                    <span className="nav-label">Messages</span>
+                </button>
+                <button className="nav-item" onClick={() => navigate('/urgence')}>
+                    <span className="nav-icon">🆘</span>
+                    <span className="nav-label">Urgence</span>
+                </button>
             </div>
         </div>
     );

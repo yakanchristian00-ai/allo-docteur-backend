@@ -107,10 +107,22 @@ function Urgence() {
             <p className="urgence-note">En cliquant, vous serez mis en relation avec une équipe médicale prioritaire.</p>
 
             <div className="bottom-nav">
-                <button className="nav-item" onClick={() => navigate('/dashboard-patient')}>🏠<span>Accueil</span></button>
-                <button className="nav-item active">🚨<span>Urgences</span></button>
-                <button className="nav-item">🕐<span>Historique</span></button>
-                <button className="nav-item" onClick={() => navigate('/profil')}>👤<span>Profil</span></button>
+                <button className="nav-item" onClick={() => navigate('/dashboard-patient')}>
+                    <span className="nav-icon">🏠</span>
+                    <span className="nav-label">Accueil</span>
+                </button>
+                <button className="nav-item" onClick={() => navigate('/mes-rendez-vous')}>
+                    <span className="nav-icon">📅</span>
+                    <span className="nav-label">Mes RDV</span>
+                </button>
+                <button className="nav-item" onClick={() => navigate('/messages')}>
+                    <span className="nav-icon">💬</span>
+                    <span className="nav-label">Messages</span>
+                </button>
+                <button className="nav-item active" onClick={() => navigate('/urgence')}>
+                    <span className="nav-icon">🆘</span>
+                    <span className="nav-label">Urgence</span>
+                </button>
             </div>
         </div>
     );

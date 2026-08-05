@@ -100,10 +100,26 @@ function DashboardPatient() {
             </div>
 
             <div className="bottom-nav">
-                <button className="nav-item active">🏠<span>Accueil</span></button>
-                <button className="nav-item" onClick={() => navigate('/mes-rendez-vous')}>📅<span>Mes RDV</span></button>
-                <button className="nav-item" onClick={() => navigate('/messages')}>💬<span>Messages</span></button>
-                <button className="nav-item" onClick={() => navigate('/profil')}>👤<span>Profil</span></button>
+                <button className="nav-item active">
+                    <span className="nav-icon">🏠</span>
+                    <span className="nav-label">Accueil</span>
+                </button>
+                <button className="nav-item" onClick={() => navigate('/mes-rendez-vous')}>
+                    <span className="nav-icon">📅</span>
+                    <span className="nav-label">Mes RDV</span>
+                </button>
+                <button className="nav-item" onClick={() => navigate('/messages')}>
+                    <span className="nav-icon">💬</span>
+                    <span className="nav-label">Messages</span>
+                </button>
+                <button className="nav-item" onClick={() => navigate('/urgence')}>
+                    <span className="nav-icon">🆘</span>
+                    <span className="nav-label">Urgence</span>
+                </button>
+                <button className="nav-item" onClick={() => navigate('/profil')}>
+                    <span className="nav-icon">👤</span>
+                    <span className="nav-label">Profil</span>
+                </button>
             </div>
         </div>
     );

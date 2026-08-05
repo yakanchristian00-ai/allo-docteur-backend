@@ -1,0 +1,260 @@
+.profil-page {
+    max-width: 420px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: #F7F8FA;
+    padding-bottom: 90px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+@media (min-width: 480px) {
+    body {
+        background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 50%, #F3E8FF 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 40px 0;
+    }
+
+    .profil-page {
+        box-shadow: 0 20px 60px rgba(37, 99, 235, 0.15);
+        border-radius: 24px;
+        max-height: 900px;
+        overflow-y: auto;
+    }
+}
+
+.profil-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.profil-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profil-avatar-header {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #E5E9F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    border: 2px solid #2563EB;
+}
+
+.profil-header h1 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #2563EB;
+    margin: 0;
+}
+
+.profil-logout {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #EF4444;
+    cursor: pointer;
+}
+
+.profil-identite {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.profil-identite h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1A1F36;
+    margin: 0 0 4px 0;
+}
+
+.profil-identite p {
+    font-size: 13px;
+    color: #6B7280;
+    margin: 0;
+}
+
+.profil-section {
+    padding: 0 20px;
+    margin-bottom: 20px;
+}
+
+.profil-section h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2563EB;
+    margin: 0 0 12px 0;
+}
+
+.info-card {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid #F1F3F6;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-row-texte label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.info-row-texte span {
+    font-size: 14px;
+    color: #1A1F36;
+}
+
+.info-row-edit {
+    background: none;
+    border: none;
+    color: #2563EB;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.action-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: white;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+}
+
+.action-icone {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #EFF4FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.action-icone.bleu {
+    background: #2563EB;
+    color: white;
+}
+
+.action-texte {
+    flex: 1;
+    font-size: 14px;
+    color: #1A1F36;
+    font-weight: 500;
+}
+
+.action-chevron {
+    color: #9CA3AF;
+    font-size: 16px;
+}
+
+.map-card {
+    margin: 0 20px 20px 20px;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    height: 150px;
+}
+
+.map-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.map-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+    padding: 30px 16px 14px 16px;
+    color: white;
+}
+
+.map-overlay h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.map-overlay p {
+    margin: 2px 0 0 0;
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.map-pin {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #2563EB;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-top: 1px solid #EEF1F5;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #9CA3AF;
+    font-size: 11px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-item.active {
+    color: #2563EB;
+}
