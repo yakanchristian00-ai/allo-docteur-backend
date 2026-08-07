@@ -16,7 +16,8 @@ import PatientsMedecin from './pages/PatientsMedecin';
 import ProfilMedecin from './pages/ProfilMedecin';
 import DashboardAdmin from './pages/DashboardAdmin';
 import UtilisateursAdmin from './pages/UtilisateursAdmin';
-
+import TarifsAdmin from './pages/TarifsAdmin';
+import ModerationAdmin from './pages/ModerationAdmin';
 function App() {
   return (
     <BrowserRouter>
@@ -39,6 +40,8 @@ function App() {
         <Route path="/profil-medecin" element={<ProfilMedecin />} />
         <Route path="/dashboard-admin" element={<DashboardAdmin />} />
         <Route path="/utilisateurs-admin" element={<UtilisateursAdmin />} />
+        <Route path="/tarifs-admin" element={<TarifsAdmin />} />
+        <Route path="/moderation-admin" element={<ModerationAdmin />} />
       </Routes>
     </BrowserRouter>
   );

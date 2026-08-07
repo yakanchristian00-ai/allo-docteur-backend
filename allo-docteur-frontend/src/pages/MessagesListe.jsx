@@ -80,7 +80,7 @@ function MessagesListe() {
                     }
                     prevNonLusCount.current = count;
                 })
-                .catch(() => {});
+                .catch(() => { });
             chargerConversations();
         }, 6000);
 

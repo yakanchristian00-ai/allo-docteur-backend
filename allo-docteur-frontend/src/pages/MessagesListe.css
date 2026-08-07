@@ -54,8 +54,15 @@
 }
 
 @keyframes slideDown {
-    from { opacity: 0; transform: translate(-50%, -20px); }
-    to { opacity: 1; transform: translate(-50%, 0); }
+    from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
 }
 
 /* En-tête */
@@ -155,7 +162,8 @@
     padding: 12px;
 }
 
-.loading-state, .empty-messages-state {
+.loading-state,
+.empty-messages-state {
     text-align: center;
     padding: 50px 20px;
     color: var(--text-muted);
