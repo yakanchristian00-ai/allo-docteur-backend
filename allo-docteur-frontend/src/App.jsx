@@ -10,6 +10,12 @@ import MesRendezVous from './pages/MesRendezVous';
 import Paiements from './pages/Paiements';
 import Profil from './pages/Profil';
 import DashboardMedecin from './pages/DashboardMedecin';
+import UrgencesMedecin from './pages/UrgencesMedecin';
+import RendezVousMedecin from './pages/RendezVousMedecin';
+import PatientsMedecin from './pages/PatientsMedecin';
+import ProfilMedecin from './pages/ProfilMedecin';
+import DashboardAdmin from './pages/DashboardAdmin';
+import UtilisateursAdmin from './pages/UtilisateursAdmin';
 
 function App() {
   return (
@@ -27,6 +33,12 @@ function App() {
         <Route path="/paiements" element={<Paiements />} />
         <Route path="/profil" element={<Profil />} />
         <Route path="/dashboard-medecin" element={<DashboardMedecin />} />
+        <Route path="/urgences-medecin" element={<UrgencesMedecin />} />
+        <Route path="/rendez-vous-medecin" element={<RendezVousMedecin />} />
+        <Route path="/patients-medecin" element={<PatientsMedecin />} />
+        <Route path="/profil-medecin" element={<ProfilMedecin />} />
+        <Route path="/dashboard-admin" element={<DashboardAdmin />} />
+        <Route path="/utilisateurs-admin" element={<UtilisateursAdmin />} />
       </Routes>
     </BrowserRouter>
   );

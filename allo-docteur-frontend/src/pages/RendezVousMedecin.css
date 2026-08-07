@@ -1,0 +1,291 @@
+.rdvmed-page {
+    max-width: 420px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: #F7F8FA;
+    padding-bottom: 90px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+@media (min-width: 480px) {
+    body {
+        background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 50%, #F3E8FF 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 40px 0;
+    }
+
+    .rdvmed-page {
+        box-shadow: 0 20px 60px rgba(37, 99, 235, 0.15);
+        border-radius: 24px;
+        max-height: 900px;
+        overflow-y: auto;
+    }
+}
+
+.rdvmed-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    background: white;
+    border-bottom: 1px solid #EEF1F5;
+}
+
+.rdvmed-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.rdvmed-topbar-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #E5E9F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.rdvmed-topbar h1 {
+    font-size: 19px;
+    font-weight: 800;
+    color: #2563EB;
+    margin: 0;
+}
+
+.rdvmed-topbar button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #1A1F36;
+    cursor: pointer;
+}
+
+.rdvmed-titre-section {
+    padding: 20px;
+}
+
+.rdvmed-titre-section h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #1A1F36;
+    margin: 0 0 4px 0;
+}
+
+.rdvmed-titre-section p {
+    font-size: 14px;
+    color: #6B7280;
+    margin: 0;
+}
+
+.dates-scroll-med {
+    display: flex;
+    gap: 10px;
+    padding: 0 20px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+
+.date-chip-med {
+    min-width: 62px;
+    background: white;
+    border: none;
+    border-radius: 14px;
+    padding: 12px 6px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.date-chip-med .jour-nom {
+    font-size: 11px;
+    font-weight: 700;
+    color: #9CA3AF;
+    letter-spacing: 0.5px;
+}
+
+.date-chip-med .jour-num {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1A1F36;
+    margin-top: 2px;
+}
+
+.date-chip-med.selected {
+    background: #2563EB;
+}
+
+.date-chip-med.selected .jour-nom,
+.date-chip-med.selected .jour-num {
+    color: white;
+}
+
+.rdvmed-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    margin: 0 20px 14px 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.rdvmed-card.attente {
+    border: 1.5px solid #DCE9FB;
+    border-left: 5px solid #EF4444;
+}
+
+.rdvmed-card-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.rdvmed-card-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #E5E9F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.rdvmed-card-nom {
+    flex: 1;
+    min-width: 0;
+}
+
+.rdvmed-card-nom h3 {
+    margin: 0;
+    font-size: 17px;
+    color: #1A1F36;
+}
+
+.rdvmed-card-nom p {
+    margin: 2px 0 0 0;
+    font-size: 13px;
+    color: #6B7280;
+}
+
+.rdvmed-card-heure {
+    text-align: right;
+}
+
+.rdvmed-card-heure .heure {
+    font-size: 19px;
+    font-weight: 800;
+    color: #1A1F36;
+}
+
+.rdvmed-card-heure.attente .heure {
+    color: #2563EB;
+}
+
+.rdvmed-card-heure .duree {
+    font-size: 12px;
+    color: #9CA3AF;
+}
+
+.rdvmed-separateur {
+    border: none;
+    border-top: 1px solid #F1F3F6;
+    margin: 12px 0;
+}
+
+.rdvmed-statut-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+
+.rdvmed-statut-chip.termine {
+    background: #F1F3F6;
+    color: #6B7280;
+}
+
+.rdvmed-statut-chip.confirme {
+    background: #2563EB;
+    color: white;
+}
+
+.rdvmed-statut-chip.attente {
+    background: #E5E9F0;
+    color: #4B5563;
+}
+
+.rdvmed-card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.btn-confirmer-med {
+    flex: 1;
+    background: #2563EB;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-reporter {
+    flex: 1;
+    background: #F1F3F6;
+    color: #374151;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.rdvmed-empty {
+    text-align: center;
+    color: #9CA3AF;
+    padding: 40px 20px;
+    font-size: 14px;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-top: 1px solid #EEF1F5;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #9CA3AF;
+    font-size: 11px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-item.active {
+    color: #2563EB;
+}

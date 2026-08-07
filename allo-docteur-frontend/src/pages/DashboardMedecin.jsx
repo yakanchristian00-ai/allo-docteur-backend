@@ -101,8 +101,8 @@ function DashboardMedecin() {
 
             <div className="bottom-nav">
                 <button className="nav-item active">📊<span>Tableau</span></button>
-                <button className="nav-item">📅<span>Calendrier</span></button>
-                <button className="nav-item">👥<span>Patients</span></button>
+                <button className="nav-item" onClick={() => navigate('/rendez-vous-medecin')}>📅<span>Calendrier</span></button>
+                <button className="nav-item" onClick={() => navigate('/patients-medecin')}>👥<span>Patients</span></button>
                 <button className="nav-item" onClick={() => navigate('/profil-medecin')}>👤<span>Profil</span></button>
             </div>
         </div>

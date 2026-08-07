@@ -48,8 +48,7 @@ function MessageChat() {
     return (
         <div className="chat-page">
             <div className="chat-header">
-                <button className="chat-back" onClick={() => navigate('/messages')}>←</button>
-                <div className="chat-avatar">{contact?.contact_role === 'medecin' ? '👨‍⚕️' : '🙂'}</div>
+                <button className="chat-back" onClick={() => navigate(user.role === 'medecin' ? '/patients-medecin' : '/messages')}>←</button>                <div className="chat-avatar">{contact?.contact_role === 'medecin' ? '👨‍⚕️' : '🙂'}</div>
                 <div className="chat-header-info">
                     <h2>{contact ? `${contact.contact_role === 'medecin' ? 'Dr. ' : ''}${contact.contact_prenom} ${contact.contact_nom}` : 'Conversation'}</h2>
                     <p>{contact?.contact_role === 'medecin' ? 'Cardiologue' : ''}</p>

@@ -1,0 +1,265 @@
+.urgmed-page {
+    max-width: 420px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: #F7F8FA;
+    padding-bottom: 90px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+@media (min-width: 480px) {
+    body {
+        background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 50%, #F3E8FF 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 40px 0;
+    }
+
+    .urgmed-page {
+        box-shadow: 0 20px 60px rgba(37, 99, 235, 0.15);
+        border-radius: 24px;
+        max-height: 900px;
+        overflow-y: auto;
+    }
+}
+
+.urgmed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    background: white;
+    border-bottom: 1px solid #EEF1F5;
+}
+
+.urgmed-header-left,
+.urgmed-header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.urgmed-header button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #1A1F36;
+    position: relative;
+}
+
+.urgmed-header h1 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #2563EB;
+    margin: 0;
+}
+
+.badge-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background: #EF4444;
+    border-radius: 50%;
+}
+
+.urgmed-titre-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.urgmed-titre-row h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1A1F36;
+    margin: 0;
+}
+
+.actives-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #FEE2E2;
+    color: #B91C1C;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+
+.urgmed-card {
+    display: flex;
+    background: white;
+    border-radius: 16px;
+    margin: 0 20px 16px 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    border-left: 5px solid;
+}
+
+.urgmed-card.critique {
+    border-left-color: #B91C1C;
+}
+
+.urgmed-card.serieuse {
+    border-left-color: #F59E0B;
+}
+
+.urgmed-card.moderee {
+    border-left-color: #FBBF24;
+}
+
+.urgmed-card-content {
+    flex: 1;
+    padding: 16px 18px;
+}
+
+.urgmed-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.urgmed-card-top h3 {
+    margin: 0;
+    font-size: 17px;
+    color: #1A1F36;
+}
+
+.urgmed-gravite-badge {
+    font-size: 11px;
+    font-weight: 800;
+    padding: 5px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.urgmed-gravite-badge.critique {
+    background: #B91C1C;
+    color: white;
+}
+
+.urgmed-gravite-badge.serieuse {
+    background: #FEF3C7;
+    color: #B45309;
+}
+
+.urgmed-gravite-badge.moderee {
+    background: #FEF9C3;
+    color: #A16207;
+}
+
+.urgmed-symptome {
+    font-size: 15px;
+    color: #374151;
+    margin: 0 0 10px 0;
+}
+
+.urgmed-meta {
+    display: flex;
+    gap: 14px;
+    font-size: 12px;
+    color: #6B7280;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.urgmed-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-prendre-charge {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: #2563EB;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-cloturer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: white;
+    color: #2563EB;
+    border: 1.5px solid #2563EB;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.urgmed-statut-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: #DCFCE7;
+    color: #15803D;
+}
+
+.urgmed-empty {
+    text-align: center;
+    color: #9CA3AF;
+    padding: 40px 20px;
+    font-size: 14px;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-top: 1px solid #EEF1F5;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #9CA3AF;
+    font-size: 11px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+}
+
+.nav-item.active {
+    color: #2563EB;
+    background: #2563EB;
+}
+
+.nav-item.active {
+    color: white;
+    background: #2563EB;
+    border-radius: 14px;
+    padding: 8px 16px;
+}

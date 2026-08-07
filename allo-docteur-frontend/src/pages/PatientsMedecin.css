@@ -1,0 +1,316 @@
+.patmed-page {
+    max-width: 420px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: #F7F8FA;
+    padding-bottom: 90px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    position: relative;
+}
+
+@media (min-width: 480px) {
+    body {
+        background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 50%, #F3E8FF 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 40px 0;
+    }
+
+    .patmed-page {
+        box-shadow: 0 20px 60px rgba(37, 99, 235, 0.15);
+        border-radius: 24px;
+        max-height: 900px;
+        overflow-y: auto;
+    }
+}
+
+.patmed-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    background: white;
+    border-bottom: 1px solid #EEF1F5;
+}
+
+.patmed-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.patmed-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: #2563EB;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.patmed-topbar h1 {
+    font-size: 19px;
+    font-weight: 800;
+    color: #2563EB;
+    margin: 0;
+}
+
+.patmed-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.patmed-topbar-right button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #1A1F36;
+    cursor: pointer;
+    position: relative;
+}
+
+.patmed-titre-section {
+    padding: 20px;
+}
+
+.patmed-titre-section h2 {
+    font-size: 30px;
+    font-weight: 800;
+    color: #1A1F36;
+    margin: 0 0 4px 0;
+}
+
+.patmed-titre-section p {
+    font-size: 14px;
+    color: #6B7280;
+    margin: 0;
+}
+
+.patmed-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 0 20px 16px 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.patmed-search input {
+    border: none;
+    outline: none;
+    font-size: 14px;
+    flex: 1;
+}
+
+.patmed-filtres {
+    display: flex;
+    gap: 10px;
+    padding: 0 20px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+
+.patmed-filtre-chip {
+    background: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.patmed-filtre-chip.active {
+    background: #2563EB;
+    color: white;
+}
+
+.patient-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    margin: 0 20px 16px 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.patient-card.urgence {
+    border: 1.5px solid #FCA5A5;
+}
+
+.patient-card-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.patient-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #E5E9F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: #2563EB;
+    flex-shrink: 0;
+}
+
+.patient-nom-bloc {
+    flex: 1;
+    min-width: 0;
+}
+
+.patient-nom-bloc h3 {
+    margin: 0;
+    font-size: 17px;
+    color: #1A1F36;
+}
+
+.patient-nom-bloc p {
+    margin: 2px 0 0 0;
+    font-size: 13px;
+    color: #6B7280;
+}
+
+.patient-statut-badge {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.patient-statut-badge.suivi {
+    background: #DCFCE7;
+    color: #15803D;
+}
+
+.patient-statut-badge.attente {
+    background: #FEF3C7;
+    color: #B45309;
+}
+
+.patient-statut-badge.urgence {
+    background: #FEE2E2;
+    color: #B91C1C;
+}
+
+.patient-info-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #4B5563;
+    margin-bottom: 6px;
+}
+
+.patient-contacts {
+    display: flex;
+    gap: 12px;
+    margin: 10px 0 14px 0;
+}
+
+.patient-contacts button {
+    background: #EFF4FF;
+    border: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    color: #2563EB;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.patient-card-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-voir-dossier {
+    flex: 1;
+    background: #EFF4FF;
+    color: #2563EB;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-prendre-rdv-patient {
+    flex: 1;
+    background: #2563EB;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.patmed-empty {
+    text-align: center;
+    color: #9CA3AF;
+    padding: 40px 20px;
+    font-size: 14px;
+}
+
+.fab-ajouter {
+    position: absolute;
+    right: 26px;
+    bottom: 100px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #2563EB;
+    color: white;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-top: 1px solid #EEF1F5;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #9CA3AF;
+    font-size: 11px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-item.active {
+    color: #2563EB;
+}
