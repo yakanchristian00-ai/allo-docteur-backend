@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useParametresPublic from '../hooks/useParametresPublic';
 import './DashboardPatient.css';
 
 function DashboardPatient() {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
+    const { parametresPublic } = useParametresPublic();
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -37,9 +39,15 @@ function DashboardPatient() {
                 <p>Voici le récapitulatif de votre santé aujourd'hui.</p>
             </div>
 
-            <button className="btn-urgence" onClick={() => navigate('/urgence')}>
-                🆘 URGENCE
-            </button>
+            {parametresPublic.urgences_actives ? (
+                <button onClick={() => navigate('/urgence')}>
+                    Urgence
+                </button>
+            ) : (
+                <button disabled className="btn-disabled">
+                    Urgences indisponibles
+                </button>
+            )}
 
             <div className="card rdv-card">
                 <div className="rdv-info">

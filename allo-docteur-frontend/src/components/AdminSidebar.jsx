@@ -21,6 +21,12 @@ function AdminSidebar({ actif }) {
                 <button className={`admin-nav-item ${actif === 'statistiques' ? 'active' : ''}`} onClick={() => navigate('/dashboard-admin')}>📈 Statistiques</button>
                 <button className={`admin-nav-item ${actif === 'tarifs' ? 'active' : ''}`} onClick={() => navigate('/tarifs-admin')}>💳 Tarifs</button>
                 <button className={`admin-nav-item ${actif === 'moderation' ? 'active' : ''}`} onClick={() => navigate('/moderation-admin')}>🛡️ Modération</button>
+                <button
+                    className={`admin-nav-item ${actif === 'parametres' ? 'active' : ''}`}
+                    onClick={() => navigate('/parametres-admin')}
+                >
+                    ⚙️ Paramètres
+                </button>
             </nav>
             <div className="admin-sidebar-footer">
                 <button className="admin-nav-item logout" onClick={handleLogout}>⇥ Déconnexion</button>

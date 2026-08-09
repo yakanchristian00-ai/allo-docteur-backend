@@ -13,6 +13,7 @@ const statsRoutes = require('./routes/stats.routes');
 const usersRoutes = require('./routes/users.routes');
 const tarifsRoutes = require('./routes/tarifs.routes');
 const moderationRoutes = require('./routes/moderation.routes');
+const parametresRoutes = require('./routes/parametres.routes');
 const app = express();
 
 app.use(cors());
@@ -29,6 +30,7 @@ app.use('/api/stats', statsRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/tarifs', tarifsRoutes);
 app.use('/api/moderation', moderationRoutes);
+app.use('/api/parametres', parametresRoutes);
 app.get('/', (req, res) => {
     res.json({ message: 'API Allo Docteur en ligne' });
 });

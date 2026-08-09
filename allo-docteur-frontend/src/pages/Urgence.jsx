@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
+import useParametresPublic from '../hooks/useParametresPublic';
 import './Urgence.css';
 
 const NIVEAUX = [
@@ -37,6 +38,23 @@ function Urgence() {
             setChargement(false);
         }
     };
+    const { parametresPublic, chargementParametres } = useParametresPublic();
+
+    if (chargementParametres) {
+        return <div>Chargement...</div>;
+    }
+
+    if (!parametresPublic.urgences_actives) {
+        return (
+            <div className="urgence-disabled-page">
+                <h1>Urgences indisponibles</h1>
+                <p>Le service d’urgence est temporairement désactivé.</p>
+                <button onClick={() => navigate('/dashboard-patient')}>
+                    Retour au tableau de bord
+                </button>
+            </div>
+        );
+    }
 
     return (
         <div className="urgence-page">

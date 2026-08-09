@@ -296,3 +296,32 @@
 .nav-item.active .nav-label {
     font-weight: 700;
 }
+
+.btn-disabled,
+.disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.urgence-disabled-page {
+    min-height: 100vh;
+    padding: 32px;
+    background: #F5F7FF;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #07153A;
+    text-align: center;
+}
+
+.urgence-disabled-page button {
+    margin-top: 20px;
+    border: none;
+    background: #2563EB;
+    color: white;
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-weight: 700;
+}

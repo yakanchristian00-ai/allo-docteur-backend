@@ -18,6 +18,7 @@ import DashboardAdmin from './pages/DashboardAdmin';
 import UtilisateursAdmin from './pages/UtilisateursAdmin';
 import TarifsAdmin from './pages/TarifsAdmin';
 import ModerationAdmin from './pages/ModerationAdmin';
+import ParametresAdmin from './pages/ParametresAdmin';
 function App() {
   return (
     <BrowserRouter>
@@ -42,6 +43,7 @@ function App() {
         <Route path="/utilisateurs-admin" element={<UtilisateursAdmin />} />
         <Route path="/tarifs-admin" element={<TarifsAdmin />} />
         <Route path="/moderation-admin" element={<ModerationAdmin />} />
+        <Route path="/parametres-admin" element={<ParametresAdmin />} />
       </Routes>
     </BrowserRouter>
   );

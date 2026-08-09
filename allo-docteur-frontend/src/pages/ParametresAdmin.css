@@ -1,0 +1,117 @@
+.parametres-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.parametres-header h1 {
+    margin: 0 0 6px 0;
+    font-size: 28px;
+    font-weight: 800;
+    color: #1A1F36;
+}
+
+.parametres-header p {
+    margin: 0;
+    color: #6B7280;
+    font-size: 14px;
+}
+
+.btn-save-settings {
+    border: none;
+    background: #2563EB;
+    color: white;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.parametres-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.parametres-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.parametres-card h2 {
+    margin: 0 0 20px 0;
+    font-size: 18px;
+    color: #1A1F36;
+}
+
+.parametres-card label {
+    display: block;
+    margin: 16px 0 6px 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: #374151;
+}
+
+.parametres-card input,
+.parametres-card select {
+    width: 100%;
+    border: 1px solid #E5E9F0;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.parametres-card input:disabled {
+    background: #F3F4F6;
+    color: #6B7280;
+    cursor: not-allowed;
+}
+
+.setting-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid #F1F3F6;
+}
+
+.setting-toggle-row:last-child {
+    border-bottom: none;
+}
+
+.setting-toggle-row strong {
+    display: block;
+    color: #1A1F36;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.setting-toggle-row p {
+    margin: 0;
+    color: #6B7280;
+    font-size: 13px;
+}
+
+.setting-toggle-row input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .parametres-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .parametres-header {
+        flex-direction: column;
+        gap: 16px;
+    }
+}
