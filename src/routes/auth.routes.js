@@ -6,24 +6,21 @@ const pool = require('../config/db');
 
 // INSCRIPTION
 router.post('/register', async (req, res) => {
-    const { nom, prenom, email, telephone, mot_de_passe, role } = req.body;
+    const { nom, prenom, email, telephone, mot_de_passe } = req.body;
 
     try {
-        // Vérifie que l'email n'existe pas déjà
         const existingUser = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
         if (existingUser.rows.length > 0) {
             return res.status(400).json({ message: 'Cet email est déjà utilisé' });
         }
 
-        // Hache le mot de passe
         const hashedPassword = await bcrypt.hash(mot_de_passe, 10);
 
-        // Insère le nouvel utilisateur
         const newUser = await pool.query(
             `INSERT INTO users (nom, prenom, email, telephone, mot_de_passe, role) 
-       VALUES ($1, $2, $3, $4, $5, $6) 
+       VALUES ($1, $2, $3, $4, $5, 'patient') 
        RETURNING id, nom, prenom, email, role`,
-            [nom, prenom, email, telephone, hashedPassword, role]
+            [nom, prenom, email, telephone, hashedPassword]
         );
 
         res.status(201).json({

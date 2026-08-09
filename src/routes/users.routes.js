@@ -36,5 +36,43 @@ router.patch('/:id/status', authMiddleware, adminOnly, async (req, res) => {
         res.status(500).json({ message: 'Erreur serveur' });
     }
 });
+router.post('/creer-medecin', authMiddleware, adminOnly, async (req, res) => {
+    const { nom, prenom, email, telephone, mot_de_passe, specialite, licence } = req.body;
+    const bcrypt = require('bcrypt');
+
+    try {
+        const existingUser = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
+        if (existingUser.rows.length > 0) {
+            return res.status(400).json({ message: 'Cet email est déjà utilisé' });
+        }
+
+        const hashedPassword = await bcrypt.hash(mot_de_passe, 10);
+
+        const newUser = await pool.query(
+            `INSERT INTO users (nom, prenom, email, telephone, mot_de_passe, role) 
+       VALUES ($1, $2, $3, $4, $5, 'medecin') 
+       RETURNING id, nom, prenom, email`,
+            [nom, prenom, email, telephone, hashedPassword]
+        );
+
+        const userId = newUser.rows[0].id;
+
+        const newMedecin = await pool.query(
+            `INSERT INTO medecins (user_id, specialite, licence, valide) 
+       VALUES ($1, $2, $3, true) 
+       RETURNING *`,
+            [userId, specialite, licence]
+        );
+
+        res.status(201).json({
+            message: 'Médecin créé avec succès',
+            user: newUser.rows[0],
+            medecin: newMedecin.rows[0],
+        });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
 
 module.exports = router;

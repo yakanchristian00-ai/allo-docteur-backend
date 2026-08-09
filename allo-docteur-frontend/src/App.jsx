@@ -19,6 +19,7 @@ import UtilisateursAdmin from './pages/UtilisateursAdmin';
 import TarifsAdmin from './pages/TarifsAdmin';
 import ModerationAdmin from './pages/ModerationAdmin';
 import ParametresAdmin from './pages/ParametresAdmin';
+import Register from './pages/Register';
 function App() {
   return (
     <BrowserRouter>
@@ -44,6 +45,7 @@ function App() {
         <Route path="/tarifs-admin" element={<TarifsAdmin />} />
         <Route path="/moderation-admin" element={<ModerationAdmin />} />
         <Route path="/parametres-admin" element={<ParametresAdmin />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );

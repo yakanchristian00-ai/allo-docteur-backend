@@ -3,6 +3,8 @@ import api from '../api/axios';
 import AdminSidebar from '../components/AdminSidebar';
 import './UtilisateursAdmin.css';
 import '../pages/DashboardAdmin.css';
+import NotificationBell from '../components/NotificationBell';
+import './TarifsAdmin.css';
 
 function initiales(nom, prenom) {
     return `${(prenom || '?')[0]}${(nom || '?')[0]}`.toUpperCase();
@@ -13,6 +15,8 @@ function UtilisateursAdmin() {
     const [roleFiltre, setRoleFiltre] = useState('tous');
     const [statutFiltre, setStatutFiltre] = useState('tous');
     const [chargement, setChargement] = useState(true);
+
+
 
     const charger = () => {
         setChargement(true);
@@ -46,6 +50,23 @@ function UtilisateursAdmin() {
 
     const totalMedecinsActifs = utilisateurs.filter((u) => u.role === 'medecin' && u.actif).length;
     const nouveauxPatients = utilisateurs.filter((u) => u.role === 'patient').length;
+    const [modalNouveauMedecin, setModalNouveauMedecin] = useState(false);
+    const [nouveauMedecin, setNouveauMedecin] = useState({
+        nom: '', prenom: '', email: '', telephone: '', mot_de_passe: '', specialite: '', licence: ''
+    });
+    const [erreurCreation, setErreurCreation] = useState('');
+
+    const creerMedecin = async () => {
+        setErreurCreation('');
+        try {
+            await api.post('/users/creer-medecin', nouveauMedecin);
+            setModalNouveauMedecin(false);
+            setNouveauMedecin({ nom: '', prenom: '', email: '', telephone: '', mot_de_passe: '', specialite: '', licence: '' });
+            charger();
+        } catch (err) {
+            setErreurCreation(err.response?.data?.message || 'Erreur lors de la création');
+        }
+    };
 
     return (
         <div className="admin-page">
@@ -55,7 +76,7 @@ function UtilisateursAdmin() {
                 <div className="admin-topbar">
                     <div className="admin-search">🔍 Rechercher...</div>
                     <div className="admin-topbar-right">
-                        <button>🔔</button>
+                        <NotificationBell />
                         <button>❓</button>
                     </div>
                 </div>
@@ -66,8 +87,7 @@ function UtilisateursAdmin() {
                             <h1>Gestion des Utilisateurs</h1>
                             <p>Gérez les profils, les rôles et les accès à la plateforme.</p>
                         </div>
-                        <button className="btn-nouvel-utilisateur">+ Nouvel Utilisateur</button>
-                    </div>
+                        <button className="btn-nouvel-utilisateur" onClick={() => setModalNouveauMedecin(true)}>+ Nouvel Utilisateur</button>                    </div>
 
                     <div className="users-stats-row">
                         <div className="users-stat-card">
@@ -162,6 +182,35 @@ function UtilisateursAdmin() {
                         </div>
                     </div>
                 </div>
+                {modalNouveauMedecin && (
+                    <div className="modal-overlay-tarif" onClick={() => setModalNouveauMedecin(false)}>
+                        <div className="modal-tarif" onClick={(e) => e.stopPropagation()}>
+                            <h3>Créer un compte médecin</h3>
+                            <label>Nom</label>
+                            <input value={nouveauMedecin.nom} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, nom: e.target.value })} />
+                            <label>Prénom</label>
+                            <input value={nouveauMedecin.prenom} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, prenom: e.target.value })} />
+                            <label>Email</label>
+                            <input type="email" value={nouveauMedecin.email} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, email: e.target.value })} />
+                            <label>Téléphone</label>
+                            <input value={nouveauMedecin.telephone} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, telephone: e.target.value })} />
+                            <label>Mot de passe temporaire</label>
+                            <input type="password" value={nouveauMedecin.mot_de_passe} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, mot_de_passe: e.target.value })} />
+                            <label>Spécialité</label>
+                            <input value={nouveauMedecin.specialite} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, specialite: e.target.value })} />
+                            <label>Numéro de licence</label>
+                            <input value={nouveauMedecin.licence} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, licence: e.target.value })} />
+
+                            {erreurCreation && <p style={{ color: 'red', fontSize: '13px', marginTop: '10px' }}>{erreurCreation}</p>}
+
+                            <div className="modal-tarif-actions">
+                                <button className="btn-annuler-modal" onClick={() => setModalNouveauMedecin(false)}>Annuler</button>
+                                <button className="btn-enregistrer-modal" onClick={creerMedecin}>Créer le compte</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
             </main>
         </div>
     );

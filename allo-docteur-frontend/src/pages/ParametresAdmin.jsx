@@ -3,6 +3,7 @@ import api from '../api/axios';
 import AdminSidebar from '../components/AdminSidebar';
 import './DashboardAdmin.css';
 import './ParametresAdmin.css';
+import NotificationBell from '../components/NotificationBell';
 
 function ParametresAdmin() {
     const [parametres, setParametres] = useState({
@@ -60,7 +61,7 @@ function ParametresAdmin() {
                 <div className="admin-topbar">
                     <div className="admin-search">🔍 Rechercher...</div>
                     <div className="admin-topbar-right">
-                        <button>🔔</button>
+                        <NotificationBell />
                         <button>❓</button>
                     </div>
                 </div>

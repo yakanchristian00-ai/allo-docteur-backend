@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import api from '../api/axios';
 
 function Login() {
@@ -61,6 +61,10 @@ function Login() {
                         required
                         style={{ width: '100%', padding: '8px' }}
                     />
+                </div>
+
+                <div style={{ textAlign: 'center', marginTop: '16px', fontSize: '14px' }}>
+                    Pas encore de compte ? <Link to="/register">S'inscrire</Link>
                 </div>
 
                 {erreur && <p style={{ color: 'red' }}>{erreur}</p>}

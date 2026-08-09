@@ -16,9 +16,10 @@ function Paiements() {
     const navigate = useNavigate();
     const [historique, setHistorique] = useState([]);
     const [rendezVous, setRendezVous] = useState([]);
+    const [tarifs, setTarifs] = useState([]);
     const [rdvSelectionne, setRdvSelectionne] = useState('');
+    const [serviceSelectionne, setServiceSelectionne] = useState('');
     const [methode, setMethode] = useState('mtn_momo');
-    const [montant, setMontant] = useState('');
     const [chargement, setChargement] = useState(false);
     const [erreur, setErreur] = useState('');
     const [succes, setSucces] = useState('');
@@ -34,11 +35,17 @@ function Paiements() {
         api.get('/rendez-vous/mes-rendez-vous')
             .then((res) => setRendezVous(res.data))
             .catch(() => setRendezVous([]));
+        api.get('/tarifs')
+            .then((res) => setTarifs(res.data))
+            .catch(() => setTarifs([]));
     }, []);
 
+    const tarifChoisi = tarifs.find((t) => String(t.id) === String(serviceSelectionne));
+    const montantAPayer = tarifChoisi ? Number(tarifChoisi.prix) : 0;
+
     const handlePayer = async () => {
-        if (!rdvSelectionne || !montant) {
-            setErreur('Merci de sélectionner un rendez-vous et un montant.');
+        if (!rdvSelectionne || !serviceSelectionne) {
+            setErreur('Merci de sélectionner un rendez-vous et un service.');
             return;
         }
         setErreur('');
@@ -48,12 +55,12 @@ function Paiements() {
         try {
             await api.post('/paiements', {
                 rendez_vous_id: Number(rdvSelectionne),
-                montant: Number(montant),
+                montant: montantAPayer,
                 methode,
             });
             setSucces('Paiement initié avec succès !');
-            setMontant('');
             setRdvSelectionne('');
+            setServiceSelectionne('');
             chargerHistorique();
         } catch (err) {
             setErreur(err.response?.data?.message || "Erreur lors de l'initiation du paiement");
@@ -86,14 +93,25 @@ function Paiements() {
                         ))}
                     </select>
 
-                    <p className="champ-label">Montant (FCFA)</p>
-                    <input
-                        type="number"
-                        className="champ-input"
-                        placeholder="Ex: 15000"
-                        value={montant}
-                        onChange={(e) => setMontant(e.target.value)}
-                    />
+                    <p className="champ-label">Service / Type de consultation</p>
+                    <select
+                        className="champ-select"
+                        value={serviceSelectionne}
+                        onChange={(e) => setServiceSelectionne(e.target.value)}
+                    >
+                        <option value="">Sélectionner un service</option>
+                        {tarifs.map((t) => (
+                            <option key={t.id} value={t.id}>
+                                {t.icone} {t.service} — {Number(t.prix).toLocaleString('fr-FR')} FCFA
+                            </option>
+                        ))}
+                    </select>
+
+                    {tarifChoisi && (
+                        <p style={{ fontSize: '14px', color: '#2563EB', fontWeight: 700, marginBottom: '16px' }}>
+                            Montant à payer : {montantAPayer.toLocaleString('fr-FR')} FCFA
+                        </p>
+                    )}
 
                     <p className="champ-label">Méthode de paiement</p>
                     <div className="methodes-grid">
@@ -113,7 +131,7 @@ function Paiements() {
                     {succes && <p style={{ color: 'green', fontSize: '13px', marginBottom: '10px' }}>{succes}</p>}
 
                     <button className="btn-payer" onClick={handlePayer} disabled={chargement}>
-                        {chargement ? 'Traitement...' : 'Payer maintenant'}
+                        {chargement ? 'Traitement...' : `Payer ${montantAPayer ? montantAPayer.toLocaleString('fr-FR') + ' FCFA' : ''}`}
                     </button>
                 </div>
             </div>

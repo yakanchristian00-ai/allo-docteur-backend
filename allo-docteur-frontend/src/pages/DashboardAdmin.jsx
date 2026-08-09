@@ -4,6 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recha
 import api from '../api/axios';
 import AdminSidebar from '../components/AdminSidebar';
 import './DashboardAdmin.css';
+import NotificationBell from '../components/NotificationBell';
 
 const MOIS_LABELS = { '01': 'Jan', '02': 'Fév', '03': 'Mar', '04': 'Avr', '05': 'Mai', '06': 'Juin', '07': 'Juil', '08': 'Août', '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Déc' };
 
@@ -35,7 +36,7 @@ function DashboardAdmin() {
                 <div className="admin-topbar">
                     <div className="admin-search">🔍 Rechercher un dossier, un praticien...</div>
                     <div className="admin-topbar-right">
-                        <button>🔔</button>
+                        <NotificationBell />
                         <button>❓</button>
                         <div className="admin-topbar-user">
                             <div className="admin-topbar-user-texte">

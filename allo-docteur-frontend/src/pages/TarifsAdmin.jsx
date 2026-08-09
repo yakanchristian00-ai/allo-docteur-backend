@@ -3,12 +3,16 @@ import api from '../api/axios';
 import AdminSidebar from '../components/AdminSidebar';
 import './TarifsAdmin.css';
 import './DashboardAdmin.css';
+import NotificationBell from '../components/NotificationBell';
 
 function TarifsAdmin() {
     const [tarifs, setTarifs] = useState([]);
     const [recherche, setRecherche] = useState('');
     const [chargement, setChargement] = useState(true);
     const [modalTarif, setModalTarif] = useState(null);
+    const [modalAjout, setModalAjout] = useState(false);
+    const [nouveauTarif, setNouveauTarif] = useState({ service: '', description: '', prix: '', icone: '💳' });
+    const [revenuMois, setRevenuMois] = useState(null);
 
     const charger = () => {
         setChargement(true);
@@ -18,8 +22,15 @@ function TarifsAdmin() {
             .finally(() => setChargement(false));
     };
 
+    const chargerRevenu = () => {
+        api.get('/stats/revenu-mois')
+            .then((res) => setRevenuMois(res.data.revenuMois))
+            .catch(() => setRevenuMois(null));
+    };
+
     useEffect(() => {
         charger();
+        chargerRevenu();
     }, []);
 
     const tarifsFiltres = tarifs.filter((t) =>
@@ -44,6 +55,23 @@ function TarifsAdmin() {
         }
     };
 
+    const creerTarif = async () => {
+        if (!nouveauTarif.service || !nouveauTarif.prix) return;
+        try {
+            await api.post('/tarifs', {
+                service: nouveauTarif.service,
+                description: nouveauTarif.description,
+                prix: Number(nouveauTarif.prix),
+                icone: nouveauTarif.icone,
+            });
+            setModalAjout(false);
+            setNouveauTarif({ service: '', description: '', prix: '', icone: '💳' });
+            charger();
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     return (
         <div className="admin-page">
             <AdminSidebar actif="tarifs" />
@@ -52,7 +80,7 @@ function TarifsAdmin() {
                 <div className="admin-topbar">
                     <div className="admin-search">🔍 Rechercher...</div>
                     <div className="admin-topbar-right">
-                        <button>🔔</button>
+                        <NotificationBell />
                         <button>❓</button>
                     </div>
                 </div>
@@ -63,7 +91,7 @@ function TarifsAdmin() {
                             <h1>Gestion des Tarifs</h1>
                             <p>Configurez les prix des consultations et services.</p>
                         </div>
-                        <button className="btn-ajouter-tarif">+ Ajouter un Tarif</button>
+                        <button className="btn-ajouter-tarif" onClick={() => setModalAjout(true)}>+ Ajouter un Tarif</button>
                     </div>
 
                     <div className="tarifs-stats-row">
@@ -85,7 +113,9 @@ function TarifsAdmin() {
                             <div className="tarifs-stat-icone plein">📈</div>
                             <div className="tarifs-stat-texte">
                                 <p>Revenu Estimé/Mois</p>
-                                <div className="tarifs-stat-value">—</div>
+                                <div className="tarifs-stat-value">
+                                    {revenuMois !== null ? `${revenuMois.toLocaleString('fr-FR')} FCFA` : '—'}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -165,6 +195,44 @@ function TarifsAdmin() {
                         <div className="modal-tarif-actions">
                             <button className="btn-annuler-modal" onClick={() => setModalTarif(null)}>Annuler</button>
                             <button className="btn-enregistrer-modal" onClick={enregistrerModification}>Enregistrer</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {modalAjout && (
+                <div className="modal-overlay-tarif" onClick={() => setModalAjout(false)}>
+                    <div className="modal-tarif" onClick={(e) => e.stopPropagation()}>
+                        <h3>Ajouter un nouveau tarif</h3>
+                        <label>Nom du service</label>
+                        <input
+                            placeholder="Ex: Consultation pédiatrique"
+                            value={nouveauTarif.service}
+                            onChange={(e) => setNouveauTarif({ ...nouveauTarif, service: e.target.value })}
+                        />
+                        <label>Description</label>
+                        <textarea
+                            rows={2}
+                            placeholder="Description courte du service"
+                            value={nouveauTarif.description}
+                            onChange={(e) => setNouveauTarif({ ...nouveauTarif, description: e.target.value })}
+                        />
+                        <label>Prix (FCFA)</label>
+                        <input
+                            type="number"
+                            placeholder="Ex: 15000"
+                            value={nouveauTarif.prix}
+                            onChange={(e) => setNouveauTarif({ ...nouveauTarif, prix: e.target.value })}
+                        />
+                        <label>Icône (emoji)</label>
+                        <input
+                            placeholder="Ex: 🩺"
+                            value={nouveauTarif.icone}
+                            onChange={(e) => setNouveauTarif({ ...nouveauTarif, icone: e.target.value })}
+                        />
+                        <div className="modal-tarif-actions">
+                            <button className="btn-annuler-modal" onClick={() => setModalAjout(false)}>Annuler</button>
+                            <button className="btn-enregistrer-modal" onClick={creerTarif}>Créer</button>
                         </div>
                     </div>
                 </div>
