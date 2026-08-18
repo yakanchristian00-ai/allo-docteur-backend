@@ -14,6 +14,7 @@ const usersRoutes = require('./routes/users.routes');
 const tarifsRoutes = require('./routes/tarifs.routes');
 const moderationRoutes = require('./routes/moderation.routes');
 const parametresRoutes = require('./routes/parametres.routes');
+const abonnementsRoutes = require('./routes/abonnements.routes');
 
 const app = express();
 
@@ -32,12 +33,13 @@ app.use('/api/users', usersRoutes);
 app.use('/api/tarifs', tarifsRoutes);
 app.use('/api/moderation', moderationRoutes);
 app.use('/api/parametres', parametresRoutes);
+app.use('/api/abonnements', abonnementsRoutes);
 
 app.get('/', (req, res) => {
     res.json({ message: 'API Allo Docteur en ligne' });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 2000;
 app.listen(PORT, () => {
     console.log(`Serveur démarré sur le port ${PORT}`);
 });

@@ -471,14 +471,13 @@
 
 .btn-danger {
     background: #FEE2E2;
-    color: #DC2626;
+    color: #B91C1C;
 }
 
 .btn-danger:hover {
     background: #FCA5A5;
-    color: #991B1B;
+    color: #7F1D1D;
 }
-
 /* État vide (Empty State) */
 .empty-rdv-state {
     background: var(--bg-card);
@@ -664,3 +663,4 @@
         gap: 20px;
     }
 }
+

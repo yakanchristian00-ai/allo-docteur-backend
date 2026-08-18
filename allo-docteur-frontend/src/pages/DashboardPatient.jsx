@@ -2,9 +2,22 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useParametresPublic from '../hooks/useParametresPublic';
 import './DashboardPatient.css';
+import api from '../api/axios';
+
 
 function DashboardPatient() {
     const [user, setUser] = useState(null);
+    const [urgenceActive, setUrgenceActive] = useState(null);
+
+    useEffect(() => {
+        if (user) {
+            api.get('/urgences/mes-urgences').then((res) => {
+                const active = res.data.find((u) => u.statut !== 'cloturee');
+                setUrgenceActive(active || null);
+            }).catch(() => { });
+        }
+    }, [user]);
+
     const navigate = useNavigate();
     const { parametresPublic } = useParametresPublic();
 
@@ -40,14 +53,35 @@ function DashboardPatient() {
             </div>
 
             {parametresPublic.urgences_actives ? (
-                <button onClick={() => navigate('/urgence')}>
+                <button className="btn-urgence" onClick={() => navigate('/urgence')}>
                     Urgence
                 </button>
             ) : (
                 <button disabled className="btn-disabled">
                     Urgences indisponibles
                 </button>
+            )}  
+
+            {urgenceActive && (
+                    <div className="card" style={{ borderLeft: '4px solid #EF4444' }}>
+                        <span className="card-label" style={{ color: '#EF4444' }}>Urgence en cours</span>
+                        <h3 style={{ margin: '6px 0 4px 0' }}>{urgenceActive.symptomes}</h3>
+                            {urgenceActive.statut === 'en_attente' && (
+                                <p style={{ color: '#B45309', fontSize: '13px', margin: 0 }}>⏳ En attente de prise en charge</p>
+                            )}
+                            {urgenceActive.statut === 'prise_en_charge' && (
+                            <p style={{ color: '#15803D', fontSize: '13px', margin: 0 }}>
+                                ✓ Prise en charge par Dr. {urgenceActive.medecin_prenom} {urgenceActive.medecin_nom}
+                            </p>
+                            )}
+                    </div>
             )}
+
+
+                <button disabled className="btn-disabled">
+                    Urgences indisponibles
+                </button>
+            
 
             <div className="card rdv-card">
                 <div className="rdv-info">

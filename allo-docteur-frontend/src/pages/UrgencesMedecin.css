@@ -263,3 +263,17 @@
     border-radius: 14px;
     padding: 8px 16px;
 }
+
+.btn-appeler {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: #DCFCE7;
+    color: #15803D;
+    border-radius: 10px;
+    font-size: 18px;
+    text-decoration: none;
+    flex-shrink: 0;
+}

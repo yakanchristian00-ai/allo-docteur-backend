@@ -58,7 +58,11 @@ router.get('/', authMiddleware, async (req, res) => {
 router.get('/mes-urgences', authMiddleware, async (req, res) => {
     try {
         const result = await pool.query(
-            `SELECT * FROM urgences WHERE patient_id = $1 ORDER BY date_creation DESC`,
+            `SELECT u.*, med_user.nom AS medecin_nom, med_user.prenom AS medecin_prenom, m.specialite
+       FROM urgences u
+       LEFT JOIN medecins m ON u.medecin_id = m.id
+       LEFT JOIN users med_user ON m.user_id = med_user.id
+       WHERE u.patient_id = $1 ORDER BY u.date_creation DESC`,
             [req.user.id]
         );
 
@@ -68,25 +72,25 @@ router.get('/mes-urgences', authMiddleware, async (req, res) => {
         res.status(500).json({ message: 'Erreur serveur' });
     }
 });
-
 // PRENDRE EN CHARGE une urgence (médecin)
 router.patch('/:id/prise-en-charge', authMiddleware, async (req, res) => {
     if (req.user.role !== 'medecin') {
         return res.status(403).json({ message: 'Accès réservé aux médecins' });
     }
-
     const { id } = req.params;
-
     try {
+        const medecinResult = await pool.query('SELECT id FROM medecins WHERE user_id = $1', [req.user.id]);
+        if (medecinResult.rows.length === 0) {
+            return res.status(404).json({ message: 'Profil médecin introuvable' });
+        }
+        const medecinId = medecinResult.rows[0].id;
         const result = await pool.query(
-            `UPDATE urgences SET statut = 'prise_en_charge' WHERE id = $1 RETURNING *`,
-            [id]
+            `UPDATE urgences SET statut = 'prise_en_charge', medecin_id = $1 WHERE id = $2 RETURNING *`,
+            [medecinId, id]
         );
-
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'Urgence introuvable' });
         }
-
         res.json({ message: 'Urgence prise en charge', urgence: result.rows[0] });
     } catch (err) {
         console.error(err.message);
@@ -99,24 +103,19 @@ router.patch('/:id/cloturer', authMiddleware, async (req, res) => {
     if (req.user.role !== 'medecin') {
         return res.status(403).json({ message: 'Accès réservé aux médecins' });
     }
-
     const { id } = req.params;
-
     try {
         const result = await pool.query(
             `UPDATE urgences SET statut = 'cloturee' WHERE id = $1 RETURNING *`,
             [id]
         );
-
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'Urgence introuvable' });
         }
-
         res.json({ message: 'Urgence clôturée', urgence: result.rows[0] });
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ message: 'Erreur serveur' });
     }
 });
-
 module.exports = router;

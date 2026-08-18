@@ -86,6 +86,16 @@ router.get('/notifications', authMiddleware, adminOnly, async (req, res) => {
       ORDER BY u.date_creation DESC
       LIMIT 5
     `);
+        const urgencesPrisesEnCharge = await pool.query(`
+  SELECT u.id, us.nom, us.prenom, um.nom AS medecin_nom, um.prenom AS medecin_prenom, u.date_creation
+  FROM urgences u
+  JOIN users us ON u.patient_id = us.id
+  LEFT JOIN medecins m ON u.medecin_id = m.id
+  LEFT JOIN users um ON m.user_id = um.id
+  WHERE u.statut = 'prise_en_charge'
+  ORDER BY u.date_creation DESC
+  LIMIT 5
+`);
 
         const notifications = [
             ...inscriptions.rows.map((i) => ({
@@ -107,6 +117,13 @@ router.get('/notifications', authMiddleware, adminOnly, async (req, res) => {
                 type: 'urgence',
                 icone: '🚨',
                 message: `Urgence critique : ${u.prenom} ${u.nom}`,
+                date: u.date_creation,
+            })),
+            ...urgencesPrisesEnCharge.rows.map((u) => ({
+                id: `urg-prise-${u.id}`,
+                type: 'urgence_prise_en_charge',
+                icone: '🟢',
+                message: `Prise en charge : ${u.prenom} ${u.nom} par Dr ${u.medecin_prenom} ${u.medecin_nom}`,
                 date: u.date_creation,
             })),
         ].sort((a, b) => new Date(b.date) - new Date(a.date));

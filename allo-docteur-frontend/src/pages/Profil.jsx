@@ -1,9 +1,31 @@
 import { useNavigate } from 'react-router-dom';
 import './Profil.css';
+import { useState, useEffect } from 'react';
+import api from '../api/axios';
+
 
 function Profil() {
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const [abonnement, setAbonnement] = useState(null);
+    const [chargementAbo, setChargementAbo] = useState(false);
+
+    useEffect(() => {
+        api.get('/abonnements/statut').then((res) => setAbonnement(res.data)).catch(() => { });
+    }, []);
+
+    const souscrire = async () => {
+        setChargementAbo(true);
+        try {
+            await api.post('/abonnements/souscrire', { methode: 'mtn_momo' });
+            const res = await api.get('/abonnements/statut');
+            setAbonnement(res.data);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setChargementAbo(false);
+        }
+    };
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -64,6 +86,39 @@ function Profil() {
                     <div className="action-icone bleu">🪪</div>
                     <div className="action-texte">Accéder à ma Carte Vitale</div>
                     <span className="action-chevron">›</span>
+                </div>
+            </div>
+            <div className="profil-section">
+                <h2>Appels vidéo</h2>
+                <div className="action-card">
+                    <div className="action-icone bleu">📹</div>
+                    <div className="action-texte">
+                        {abonnement?.actif ? (
+                            <>
+                                <div>Abonnement actif</div>
+                                <p style={{ margin: '2px 0 0 0', fontSize: '12px', color: '#6B7280' }}>
+                                    Valide jusqu'au {new Date(abonnement.abonnement.date_fin).toLocaleDateString('fr-FR')}
+                                </p>
+                            </>
+                        ) : (
+                            <>
+                                <div>Débloquez les appels vidéo</div>
+                                <p style={{ margin: '2px 0 0 0', fontSize: '12px', color: '#6B7280' }}>
+                                    2 000 FCFA / mois
+                                </p>
+
+                            </>
+                        )}
+                    </div>
+                    {!abonnement?.actif && (
+                        <button
+                            onClick={souscrire}
+                            disabled={chargementAbo}
+                            style={{ background: '#2563EB', color: 'white', border: 'none', borderRadius: '8px', padding: '10px 16px', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}
+                        >
+                            {chargementAbo ? '...' : "S'abonner"}
+                        </button>
+                    )}
                 </div>
             </div>
 

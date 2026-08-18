@@ -94,6 +94,9 @@ function UrgencesMedecin() {
 
                         {u.statut === 'en_attente' && (
                             <div className="urgmed-actions">
+                                <a href={`tel:${u.telephone}`} className="btn-appeler">
+                                    📞
+                                </a>
                                 <button className="btn-prendre-charge" onClick={() => prendreEnCharge(u.id)}>
                                     ✓ Prendre en charge
                                 </button>
@@ -102,9 +105,11 @@ function UrgencesMedecin() {
                                 </button>
                             </div>
                         )}
-
                         {u.statut === 'prise_en_charge' && (
                             <div className="urgmed-actions">
+                                <a href={`tel:${u.telephone}`} className="btn-appeler">
+                                    📞
+                                </a>
                                 <span className="urgmed-statut-tag">✓ Prise en charge</span>
                                 <button className="btn-cloturer" onClick={() => cloturer(u.id)}>
                                     ✕ Clôturer

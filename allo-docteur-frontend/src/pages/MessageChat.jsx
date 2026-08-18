@@ -3,6 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import api from '../api/axios';
 import './MessageChat.css';
 
+
+
 function MessageChat() {
     const navigate = useNavigate();
     const { contactId } = useParams();
@@ -10,6 +12,7 @@ function MessageChat() {
     const [nouveauMessage, setNouveauMessage] = useState('');
     const [contact, setContact] = useState(null);
     const finRef = useRef(null);
+    const [abonnementActif, setAbonnementActif] = useState(false);
     const user = JSON.parse(localStorage.getItem('user') || '{}');
 
     const chargerMessages = () => {
@@ -30,6 +33,18 @@ function MessageChat() {
     useEffect(() => {
         finRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
+
+
+    useEffect(() => {
+        if (user.role === 'patient') {
+            api.get('/abonnements/statut').then((res) => setAbonnementActif(res.data.actif)).catch(() => { });
+        }
+    }, []);
+
+    const demarrerAppel = () => {
+        const salle = `allodocteur-${Math.min(user.id, Number(contactId))}-${Math.max(user.id, Number(contactId))}`;
+        window.open(`https://meet.jit.si/${salle}`, '_blank');
+    };
 
     const envoyer = async () => {
         if (!nouveauMessage.trim()) return;
@@ -52,6 +67,11 @@ function MessageChat() {
                 <div className="chat-header-info">
                     <h2>{contact ? `${contact.contact_role === 'medecin' ? 'Dr. ' : ''}${contact.contact_prenom} ${contact.contact_nom}` : 'Conversation'}</h2>
                     <p>{contact?.contact_role === 'medecin' ? 'Cardiologue' : ''}</p>
+                    {(user.role === 'medecin' || abonnementActif) && (
+                        <button onClick={demarrerAppel} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#2563EB' }}>
+                            📹
+                        </button>
+                    )}
                 </div>
             </div>
 
