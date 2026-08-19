@@ -66,109 +66,61 @@ router.post('/upload', authMiddleware, upload.single('fichier'), (req, res) => {
 
 // 2. ENVOYER un message (texte et/ou pièce jointe)
 router.post('/', authMiddleware, async (req, res) => {
-    const { destinataire_id, contenu, rendez_vous_id, piece_jointe_url, piece_jointe_nom, type_fichier } = req.body;
-    const expediteur_id = req.user.id;
+  const { destinataire_id, contenu, rendez_vous_id, piece_jointe_url, piece_jointe_nom } = req.body;
+  const expediteur_id = req.user.id;
 
-    if (!destinataire_id) {
-        return res.status(400).json({ message: 'Destinataire manquant' });
-    }
+  try {
+    const newMessage = await pool.query(
+      `INSERT INTO messages (expediteur_id, destinataire_id, rendez_vous_id, contenu, lu, piece_jointe_url, piece_jointe_nom) 
+       VALUES ($1, $2, $3, $4, false, $5, $6) 
+       RETURNING *`,
+      [expediteur_id, destinataire_id, rendez_vous_id || null, contenu || '', piece_jointe_url || null, piece_jointe_nom || null]
+    );
 
-    if (!contenu && !piece_jointe_url) {
-        return res.status(400).json({ message: 'Le message doit contenir du texte ou un fichier attached' });
-    }
-
-    try {
-        // Tentative d'insertion avec colonnes pièces jointes si existantes
-        const query = `
-            INSERT INTO messages (
-                expediteur_id, 
-                destinataire_id, 
-                rendez_vous_id, 
-                contenu, 
-                lu,
-                piece_jointe_url,
-                piece_jointe_nom,
-                type_fichier
-            ) 
-            VALUES ($1, $2, $3, $4, false, $5, $6, $7) 
-            RETURNING *`;
-            
-        const values = [
-            expediteur_id, 
-            destinataire_id, 
-            rendez_vous_id || null, 
-            contenu || '', 
-            piece_jointe_url || null,
-            piece_jointe_nom || null,
-            type_fichier || null
-        ];
-
-        let newMessage;
-        try {
-            newMessage = await pool.query(query, values);
-        } catch (dbErr) {
-            // Fallback si la table messages n'a pas encore les colonnes piece_jointe
-            console.warn('Fallback insertion message simple:', dbErr.message);
-            const fallbackQuery = `
-                INSERT INTO messages (expediteur_id, destinataire_id, rendez_vous_id, contenu, lu)
-                VALUES ($1, $2, $3, $4, false)
-                RETURNING *`;
-            newMessage = await pool.query(fallbackQuery, [
-                expediteur_id,
-                destinataire_id,
-                rendez_vous_id || null,
-                contenu || (piece_jointe_url ? `[Fichier joint] ${piece_jointe_nom || ''}` : '')
-            ]);
-        }
-
-        res.status(201).json({
-            message: 'Message envoyé',
-            data: newMessage.rows[0]
-        });
-    } catch (err) {
-        console.error('Erreur envoi message:', err.message);
-        res.status(500).json({ message: 'Erreur serveur lors de l\'envoi du message' });
-    }
+    res.status(201).json({
+      message: 'Message envoyé',
+      data: newMessage.rows[0]
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
 });
+
 
 // 3. LISTE des conversations avec compteur de non-lus
 router.get('/conversations', authMiddleware, async (req, res) => {
-    const userId = req.user.id;
+  const userId = req.user.id;
 
-    try {
-        const result = await pool.query(
-            `SELECT DISTINCT ON (contact_id) 
-                 contact_id, 
-                 u.nom AS contact_nom, 
-                 u.prenom AS contact_prenom,
-                 u.role AS contact_role,
-                 m.contenu AS dernier_message,
-                 m.date_envoi AS date_dernier_message,
-                 m.lu,
-                 (
-                     SELECT COUNT(*)::int 
-                     FROM messages 
-                     WHERE expediteur_id = m.contact_id 
-                       AND destinataire_id = $1 
-                       AND lu = false
-                 ) AS non_lus
-               FROM (
-                 SELECT 
-                   CASE WHEN expediteur_id = $1 THEN destinataire_id ELSE expediteur_id END AS contact_id,
-                   contenu, date_envoi, lu, expediteur_id
-                 FROM messages
-                 WHERE expediteur_id = $1 OR destinataire_id = $1
-               ) m
-               JOIN users u ON u.id = m.contact_id
-               ORDER BY contact_id, date_envoi DESC`,
-            [userId]
-        );
+  try {
+    const result = await pool.query(
+      `SELECT DISTINCT ON (contact_id) 
+         contact_id, 
+         u.nom AS contact_nom, 
+         u.prenom AS contact_prenom,
+         u.role AS contact_role,
+         med.specialite AS contact_specialite,
+         m.contenu AS dernier_message,
+         m.date_envoi AS date_dernier_message,
+         m.lu
+       FROM (
+         SELECT 
+           CASE WHEN expediteur_id = $1 THEN destinataire_id ELSE expediteur_id END AS contact_id,
+           contenu, date_envoi, lu, expediteur_id
+         FROM messages
+         WHERE expediteur_id = $1 OR destinataire_id = $1
+       ) m
+       JOIN users u ON u.id = m.contact_id
+       LEFT JOIN medecins med ON med.user_id = u.id
+       ORDER BY contact_id, date_envoi DESC`,
+      [userId]
+    );
 
-        res.json(result.rows);
-    } catch (err) {
-        console.error('Erreur conversations:', err.message);
-        res.status(500).json({ message: 'Erreur serveur lors du chargement des conversations' });
-    }
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
 });
 
 // 4. MESSAGES d'une conversation spécifique + Marquage automatique comme lus

@@ -413,3 +413,42 @@
     border-radius: 10px;
     border: 1px solid white;
 }
+@media (min-width: 480px) {
+  body {
+    background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 50%, #F3E8FF 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .msgliste-page {
+    max-width: 480px;
+    min-height: 880px;
+  }
+  .contact-name {
+    font-size: 16px;
+  }
+  .conversation-preview {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 480px) {
+  body {
+    background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 50%, #F3E8FF 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .chat-page {
+    max-width: 480px;
+    height: 880px;
+  }
+}

@@ -29,7 +29,7 @@ function Register() {
         setChargement(true);
 
         try {
-            const response = await api.post('/auth/register', {
+            await api.post('/auth/register', {
                 nom,
                 prenom,
                 email,

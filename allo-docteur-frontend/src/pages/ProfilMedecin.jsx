@@ -6,16 +6,18 @@ import './ProfilMedecin.css';
 function ProfilMedecin() {
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userNom = user.nom;
+    const userPrenom = user.prenom;
     const [medecinInfo, setMedecinInfo] = useState(null);
 
     useEffect(() => {
         api.get('/medecins')
             .then((res) => {
-                const moi = res.data.find((m) => m.prenom === user.prenom && m.nom === user.nom);
+                const moi = res.data.find((m) => m.prenom === userPrenom && m.nom === userNom);
                 if (moi) setMedecinInfo(moi);
             })
             .catch(() => { });
-    }, []);
+    }, [userNom, userPrenom]);
 
     const handleLogout = () => {
         localStorage.removeItem('token');

@@ -365,6 +365,7 @@
     font-size: 14px;
     outline: none;
     background: #F8FAFC;
+    color: #0F172A;
 }
 
 .chat-input:focus {

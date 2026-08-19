@@ -20,6 +20,7 @@ import TarifsAdmin from './pages/TarifsAdmin';
 import ModerationAdmin from './pages/ModerationAdmin';
 import ParametresAdmin from './pages/ParametresAdmin';
 import Register from './pages/Register';
+
 function App() {
   return (
     <BrowserRouter>

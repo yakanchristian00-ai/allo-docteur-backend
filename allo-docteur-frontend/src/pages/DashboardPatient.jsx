@@ -6,8 +6,13 @@ import api from '../api/axios';
 
 
 function DashboardPatient() {
-    const [user, setUser] = useState(null);
+    const [user] = useState(() => {
+        const storedUser = localStorage.getItem('user');
+        return storedUser ? JSON.parse(storedUser) : null;
+    });
     const [urgenceActive, setUrgenceActive] = useState(null);
+    const navigate = useNavigate();
+    const { parametresPublic } = useParametresPublic();
 
     useEffect(() => {
         if (user) {
@@ -18,17 +23,11 @@ function DashboardPatient() {
         }
     }, [user]);
 
-    const navigate = useNavigate();
-    const { parametresPublic } = useParametresPublic();
-
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (!storedUser) {
+        if (!user) {
             navigate('/login');
-            return;
         }
-        setUser(JSON.parse(storedUser));
-    }, [navigate]);
+    }, [navigate, user]);
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -63,25 +62,19 @@ function DashboardPatient() {
             )}  
 
             {urgenceActive && (
-                    <div className="card" style={{ borderLeft: '4px solid #EF4444' }}>
-                        <span className="card-label" style={{ color: '#EF4444' }}>Urgence en cours</span>
-                        <h3 style={{ margin: '6px 0 4px 0' }}>{urgenceActive.symptomes}</h3>
-                            {urgenceActive.statut === 'en_attente' && (
-                                <p style={{ color: '#B45309', fontSize: '13px', margin: 0 }}>⏳ En attente de prise en charge</p>
-                            )}
-                            {urgenceActive.statut === 'prise_en_charge' && (
+                <div className="card" style={{ borderLeft: '4px solid #EF4444' }}>
+                    <span className="card-label" style={{ color: '#EF4444' }}>Urgence en cours</span>
+                    <h3 style={{ margin: '6px 0 4px 0' }}>{urgenceActive.symptomes}</h3>
+                    {urgenceActive.statut === 'en_attente' && (
+                        <p style={{ color: '#B45309', fontSize: '13px', margin: 0 }}>⏳ En attente de prise en charge</p>
+                    )}
+                    {urgenceActive.statut === 'prise_en_charge' && (
                             <p style={{ color: '#15803D', fontSize: '13px', margin: 0 }}>
                                 ✓ Prise en charge par Dr. {urgenceActive.medecin_prenom} {urgenceActive.medecin_nom}
                             </p>
-                            )}
-                    </div>
+                    )}
+                </div>
             )}
-
-
-                <button disabled className="btn-disabled">
-                    Urgences indisponibles
-                </button>
-            
 
             <div className="card rdv-card">
                 <div className="rdv-info">
