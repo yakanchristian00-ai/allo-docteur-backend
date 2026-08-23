@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import './PrendreRdv.css';
 
-const HORAIRES = ['09:00', '09:30', '10:00', '10:30', '14:00', '14:30', '15:00', '15:30'];
+const JOURS_SEMAINE = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
 
 function genererDates() {
     const jours = ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'];
@@ -26,12 +26,13 @@ function PrendreRdv() {
     const [medecinSelectionne, setMedecinSelectionne] = useState(null);
     const [dates] = useState(genererDates());
     const [dateSelectionnee, setDateSelectionnee] = useState(genererDates()[0].iso);
-    const [horaireSelectionne, setHoraireSelectionne] = useState('09:30');
+    const [horaireSelectionne, setHoraireSelectionne] = useState('');
     const [motif, setMotif] = useState('');
     const [chargement, setChargement] = useState(false);
     const [chargementMedecins, setChargementMedecins] = useState(true);
     const [erreur, setErreur] = useState('');
     const [succes, setSucces] = useState('');
+    const [disponibilites, setDisponibilites] = useState([]);
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -57,9 +58,47 @@ function PrendreRdv() {
             });
     }, [navigate]);
 
+    // Charge les disponibilités du médecin sélectionné
+    useEffect(() => {
+        if (medecinSelectionne) {
+            api.get(`/disponibilites/medecin/${medecinSelectionne}`)
+                .then((res) => setDisponibilites(res.data))
+                .catch(() => setDisponibilites([]));
+        }
+    }, [medecinSelectionne]);
+
+    // Calcule les créneaux réels disponibles pour le jour choisi
+    function genererCreneauxDisponibles() {
+        const dateObj = new Date(dateSelectionnee);
+        const nomJour = JOURS_SEMAINE[dateObj.getDay()];
+
+        const dispoDuJour = disponibilites.filter((d) => d.jour_semaine === nomJour);
+        if (dispoDuJour.length === 0) return [];
+
+        const creneaux = [];
+        dispoDuJour.forEach((d) => {
+            let [heure, minute] = d.heure_debut.slice(0, 5).split(':').map(Number);
+            const [heureFin, minuteFin] = d.heure_fin.slice(0, 5).split(':').map(Number);
+
+            while (heure < heureFin || (heure === heureFin && minute < minuteFin)) {
+                creneaux.push(`${String(heure).padStart(2, '0')}:${String(minute).padStart(2, '0')}`);
+                minute += 30;
+                if (minute >= 60) { minute = 0; heure += 1; }
+            }
+        });
+
+        return creneaux;
+    }
+
+    const creneauxDisponibles = genererCreneauxDisponibles();
+
     const handleConfirmer = async () => {
         if (!medecinSelectionne) {
             setErreur('Veuillez sélectionner un médecin.');
+            return;
+        }
+        if (!horaireSelectionne) {
+            setErreur('Veuillez sélectionner un horaire.');
             return;
         }
         setErreur('');
@@ -115,7 +154,7 @@ function PrendreRdv() {
                             <div
                                 key={m.id}
                                 className={`medecin-card ${medecinSelectionne === m.id ? 'selected' : ''}`}
-                                onClick={() => setMedecinSelectionne(m.id)}
+                                onClick={() => { setMedecinSelectionne(m.id); setHoraireSelectionne(''); }}
                             >
                                 <div className="medecin-top">
                                     <div className="medecin-avatar">👨‍⚕️</div>
@@ -138,7 +177,7 @@ function PrendreRdv() {
                         <button
                             key={d.iso}
                             className={`date-chip ${dateSelectionnee === d.iso ? 'selected' : ''}`}
-                            onClick={() => setDateSelectionnee(d.iso)}
+                            onClick={() => { setDateSelectionnee(d.iso); setHoraireSelectionne(''); }}
                         >
                             <div className="jour-nom">{d.label}</div>
                             <div className="jour-num">{d.jour}</div>
@@ -149,17 +188,21 @@ function PrendreRdv() {
 
             <div className="rdv-section">
                 <h2>Horaires disponibles</h2>
-                <div className="horaires-grid">
-                    {HORAIRES.map((h) => (
-                        <button
-                            key={h}
-                            className={`horaire-chip ${horaireSelectionne === h ? 'selected' : ''}`}
-                            onClick={() => setHoraireSelectionne(h)}
-                        >
-                            {h}
-                        </button>
-                    ))}
-                </div>
+                {creneauxDisponibles.length === 0 ? (
+                    <p style={{ color: '#9CA3AF', fontSize: '14px' }}>Aucune disponibilité ce jour-là pour ce médecin.</p>
+                ) : (
+                    <div className="horaires-grid">
+                        {creneauxDisponibles.map((h) => (
+                            <button
+                                key={h}
+                                className={`horaire-chip ${horaireSelectionne === h ? 'selected' : ''}`}
+                                onClick={() => setHoraireSelectionne(h)}
+                            >
+                                {h}
+                            </button>
+                        ))}
+                    </div>
+                )}
             </div>
 
             <div className="rdv-section">
@@ -178,7 +221,7 @@ function PrendreRdv() {
                 </p>
             )}
 
-            <button className="btn-confirmer" onClick={handleConfirmer} disabled={chargement || !medecinSelectionne}>
+            <button className="btn-confirmer" onClick={handleConfirmer} disabled={chargement || !medecinSelectionne || !horaireSelectionne}>
                 ✓ {chargement ? 'Confirmation...' : 'Confirmer le rendez-vous'}
             </button>
 

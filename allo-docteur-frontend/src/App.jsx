@@ -20,6 +20,10 @@ import TarifsAdmin from './pages/TarifsAdmin';
 import ModerationAdmin from './pages/ModerationAdmin';
 import ParametresAdmin from './pages/ParametresAdmin';
 import Register from './pages/Register';
+import GestionConseils from './pages/GestionConseils';
+import DemandesAdmin from './pages/DemandesAdmin';
+import StatistiquesDetaillees from './pages/StatistiquesDetaillees';
+import Disponibilites from './pages/Disponibilites';
 
 function App() {
   return (
@@ -47,6 +51,10 @@ function App() {
         <Route path="/moderation-admin" element={<ModerationAdmin />} />
         <Route path="/parametres-admin" element={<ParametresAdmin />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/gestion-conseils" element={<GestionConseils />} />
+        <Route path="/demandes-admin" element={<DemandesAdmin />} />
+        <Route path="/statistiques-detaillees" element={<StatistiquesDetaillees />} />
+        <Route path="/disponibilites" element={<Disponibilites />} />
       </Routes>
     </BrowserRouter>
   );

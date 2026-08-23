@@ -4,7 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recha
 import api from '../api/axios';
 import AdminSidebar from '../components/AdminSidebar';
 import './DashboardAdmin.css';
-import NotificationBell from '../components/NotificationBell';
+import { Search, Bell, HelpCircle, Calendar, AlertTriangle, DollarSign, Users } from 'lucide-react';
 
 const MOIS_LABELS = { '01': 'Jan', '02': 'Fév', '03': 'Mar', '04': 'Avr', '05': 'Mai', '06': 'Juin', '07': 'Juil', '08': 'Août', '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Déc' };
 
@@ -27,6 +27,26 @@ function DashboardAdmin() {
         mois: MOIS_LABELS[m.mois] || m.mois,
         total: Number(m.total),
     }));
+    const exporterCSV = () => {
+       if (dataGraphique.length === 0) {
+            return;
+        }
+
+        let csv = 'Mois,Nombre de rendez-vous\n';
+        dataGraphique.forEach((d) => {
+          csv += `${d.mois},${d.total}\n`;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const lien = document.createElement('a');
+        lien.href = url;
+        lien.download = `rendez-vous-${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(lien);
+        lien.click();
+        lien.remove();
+        URL.revokeObjectURL(url);
+  };
 
     return (
         <div className="admin-page">
@@ -34,10 +54,11 @@ function DashboardAdmin() {
 
             <main className="admin-main">
                 <div className="admin-topbar">
-                    <div className="admin-search">🔍 Rechercher un dossier, un praticien...</div>
+                    <div className="admin-search"><Search size={16} /> Rechercher un dossier, un praticien...</div>
                     <div className="admin-topbar-right">
-                        <NotificationBell />
-                        <button>❓</button>
+                        <button type="button"><Bell size={18} /></button>
+
+                        <button type="button"><HelpCircle size={18} /></button>
                         <div className="admin-topbar-user">
                             <div className="admin-topbar-user-texte">
                                 <p>{user.prenom} {user.nom}</p>
@@ -52,7 +73,7 @@ function DashboardAdmin() {
                     <div className="stats-grid-admin">
                         <div className="stat-card-admin">
                             <div className="stat-card-admin-top">
-                                <div className="stat-card-admin-icone">📅</div>
+                                <div className="stat-card-admin-icone"><Calendar size={20} /></div>
                                 <span className="stat-card-admin-badge">+12%</span>
                             </div>
                             <p className="stat-card-admin-label">Rendez-vous totaux</p>
@@ -61,7 +82,7 @@ function DashboardAdmin() {
 
                         <div className="stat-card-admin">
                             <div className="stat-card-admin-top">
-                                <div className="stat-card-admin-icone">🚨</div>
+                                <div className="stat-card-admin-icone"><AlertTriangle size={20} /></div>
                                 <span className="stat-card-admin-badge urgent">Urgent</span>
                             </div>
                             <p className="stat-card-admin-label">Urgences traitées</p>
@@ -70,7 +91,7 @@ function DashboardAdmin() {
 
                         <div className="stat-card-admin">
                             <div className="stat-card-admin-top">
-                                <div className="stat-card-admin-icone">💰</div>
+                                <div className="stat-card-admin-icone"><DollarSign size={20} /></div>
                                 <span className="stat-card-admin-badge">Ce mois</span>
                             </div>
                             <p className="stat-card-admin-label">Revenus</p>
@@ -79,7 +100,7 @@ function DashboardAdmin() {
 
                         <div className="stat-card-admin">
                             <div className="stat-card-admin-top">
-                                <div className="stat-card-admin-icone">👤</div>
+                                <div className="stat-card-admin-icone"><Users size={20} /></div>
                                 <span className="stat-card-admin-badge">+5.4%</span>
                             </div>
                             <p className="stat-card-admin-label">Utilisateurs actifs</p>
@@ -94,8 +115,8 @@ function DashboardAdmin() {
                                 <p>Analyse de la fréquentation du premier semestre</p>
                             </div>
                             <div className="chart-actions">
-                                <button className="btn-exporter">Exporter CSV</button>
-                                <button className="btn-details">Détails</button>
+                                <button type="button" className="btn-exporter" onClick={exporterCSV}>Exporter CSV</button>
+                                <button type="button" className="btn-details" onClick={() => navigate('/statistiques-detaillees')}>Détails</button>
                             </div>
                         </div>
                         <ResponsiveContainer width="100%" height={280}>
@@ -111,7 +132,7 @@ function DashboardAdmin() {
                     <div className="table-card">
                         <div className="table-card-top">
                             <h2>Inscriptions récentes</h2>
-                            <a onClick={() => navigate('/utilisateurs-admin')}>Voir tout</a>
+                            <button type="button" onClick={() => navigate('/utilisateurs-admin')}>Voir tout</button>
                         </div>
                         <table className="admin-table">
                             <thead>

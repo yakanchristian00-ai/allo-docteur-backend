@@ -1,110 +1,299 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import './ProfilMedecin.css';
 
 function ProfilMedecin() {
-    const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const userNom = user.nom;
-    const userPrenom = user.prenom;
-    const [medecinInfo, setMedecinInfo] = useState(null);
+  const navigate = useNavigate();
+  const [profil, setProfil] = useState(null);
+  const [demandes, setDemandes] = useState([]);
+  const [chargement, setChargement] = useState(true);
+  const inputPhotoRef = useRef(null);
+  const [uploadEnCours, setUploadEnCours] = useState(false);
 
-    useEffect(() => {
-        api.get('/medecins')
-            .then((res) => {
-                const moi = res.data.find((m) => m.prenom === userPrenom && m.nom === userNom);
-                if (moi) setMedecinInfo(moi);
-            })
-            .catch(() => { });
-    }, [userNom, userPrenom]);
+  // Champs modifiables directement
+  const [telephone, setTelephone] = useState('');
+  const [bio, setBio] = useState('');
+  const [messageSucces, setMessageSucces] = useState('');
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        navigate('/login');
-    };
+  // Modale de demande
+  const [modalDemande, setModalDemande] = useState(null); // { champ, label, valeurActuelle }
+  const [valeurDemandee, setValeurDemandee] = useState('');
+  const [erreurDemande, setErreurDemande] = useState('');
 
-    return (
-        <div className="profilmed-page">
-            <div className="profilmed-topbar">
-                <div className="profilmed-topbar-left">
-                    <div className="profilmed-topbar-avatar">👨‍⚕️</div>
-                    <h1>Allo Docteur</h1>
-                </div>
-                <button>🔔</button>
-            </div>
+  const charger = () => {
+    setChargement(true);
+    api.get('/profil-medecin/moi').then((res) => {
+      setProfil(res.data);
+      setTelephone(res.data.telephone || '');
+      setBio(res.data.bio || '');
+    }).catch(() => {}).finally(() => setChargement(false));
 
-            <div className="profilmed-carte-identite">
-                <div className="profilmed-avatar-wrapper">
-                    <div className="profilmed-avatar-grande">👨‍⚕️</div>
-                    <div className="profilmed-avatar-edit">✎</div>
-                </div>
-                <h2>Dr. {user.prenom} {user.nom}</h2>
-                <p>{medecinInfo?.specialite || 'Spécialité non renseignée'}</p>
-                <div className="badge-disponible">
-                    <span className="dot"></span> Disponible
-                </div>
-            </div>
+    api.get('/profil-medecin/mes-demandes').then((res) => setDemandes(res.data)).catch(() => setDemandes([]));
+  };
 
-            <div className="profilmed-section">
-                <h2 className="profilmed-section-titre">👤 Informations personnelles</h2>
-                <div className="profilmed-info-row">
-                    <div className="profilmed-info-row-texte">
-                        <label>Email</label>
-                        <span>{user.email}</span>
-                    </div>
-                    <button className="profilmed-edit-btn">✎</button>
-                </div>
-                <div className="profilmed-info-row">
-                    <div className="profilmed-info-row-texte">
-                        <label>Téléphone</label>
-                        <span>{user.telephone || 'Non renseigné'}</span>
-                    </div>
-                    <button className="profilmed-edit-btn">✎</button>
-                </div>
-                <div className="profilmed-info-row">
-                    <div className="profilmed-info-row-texte">
-                        <label>Licence professionnelle</label>
-                        <span>{medecinInfo?.licence || 'Non renseignée'}</span>
-                    </div>
-                    <button className="profilmed-edit-btn">✎</button>
-                </div>
-            </div>
+  useEffect(() => {
+    charger();
+  }, []);
 
-            <div className="profilmed-section">
-                <h2 className="profilmed-section-titre">✚ Ma pratique</h2>
-                <div className="profilmed-pratique-item">
-                    <label>Spécialité</label>
-                    <span>{medecinInfo?.specialite || 'Non renseignée'}</span>
-                </div>
-                <div className="profilmed-pratique-item">
-                    <label>Lieu d'exercice</label>
-                    <span>📍 Hôpital Général de Douala</span>
-                </div>
-            </div>
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
+  };
 
-            <div className="action-card-med">
-                <div className="action-icone-med">🕐</div>
-                <div className="action-texte-med">
-                    <h3>Disponibilités</h3>
-                    <p>Gérer vos horaires de consultation</p>
-                </div>
-                <span>›</span>
-            </div>
+  const enregistrerDirect = async () => {
+    try {
+      await api.put('/profil-medecin/moi', { telephone, photo_url: profil.photo_url, bio });
+      setMessageSucces('Profil mis à jour !');
+      setTimeout(() => setMessageSucces(''), 3000);
+      charger();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const handlePhoto = async (e) => {
+    const fichier = e.target.files[0];
+    if (!fichier) return;
 
-            <button className="btn-deconnexion-med" onClick={handleLogout}>
-                ⇥ Déconnexion
-            </button>
+    setUploadEnCours(true);
+    try {
+      const formData = new FormData();
+      formData.append('photo', fichier);
 
-            <div className="bottom-nav">
-                <button className="nav-item" onClick={() => navigate('/dashboard-medecin')}>📊<span>Tableau</span></button>
-                <button className="nav-item" onClick={() => navigate('/rendez-vous-medecin')}>📅<span>Agenda</span></button>
-                <button className="nav-item" onClick={() => navigate('/patients-medecin')}>👥<span>Patients</span></button>
-                <button className="nav-item active">👤<span>Profil</span></button>
-            </div>
+      const res = await api.post('/profil-medecin/photo', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+
+    // Met à jour le localStorage pour que les autres pages voient la nouvelle photo
+    const userStorage = JSON.parse(localStorage.getItem('user'));
+    userStorage.photo_url = res.data.photo_url;
+    localStorage.setItem('user', JSON.stringify(userStorage));
+
+    charger();
+   } catch (err) {
+    console.error(err);
+   } finally {
+    setUploadEnCours(false);
+    e.target.value = '';
+   }
+  };
+
+  const ouvrirDemande = (champ, label, valeurActuelle) => {
+    setModalDemande({ champ, label, valeurActuelle });
+    setValeurDemandee(valeurActuelle || '');
+    setErreurDemande('');
+  };
+
+  const envoyerDemande = async () => {
+    if (!valeurDemandee.trim()) {
+      setErreurDemande('Merci de préciser la valeur souhaitée.');
+      return;
+    }
+    try {
+      await api.post('/profil-medecin/demande', {
+        champ: modalDemande.champ,
+        valeur_actuelle: modalDemande.valeurActuelle,
+        valeur_demandee: valeurDemandee,
+      });
+      setModalDemande(null);
+      charger();
+    } catch (err) {
+      setErreurDemande(err.response?.data?.message || 'Erreur lors de l\'envoi');
+    }
+  };
+
+  if (chargement || !profil) return null;
+
+
+  return (
+    <div className="profilmed-page">
+      <div className="profilmed-topbar">
+        <div className="profilmed-topbar-left">
+          <div className="profilmed-topbar-avatar">👨‍⚕️</div>
+          <h1>Allo Docteur</h1>
         </div>
-    );
+        <button>🔔</button>
+      </div>
+
+      <div className="profilmed-avatar-wrapper">
+        {profil.photo_url ? (
+         <img
+          src={`http://localhost:5000${profil.photo_url}`}
+          alt="Photo de profil"
+          className="profilmed-avatar-grande"
+          style={{ objectFit: 'cover' }}
+         />
+        ) : (
+          <div className="profilmed-avatar-grande">👨‍⚕️</div>
+        )}
+        <input
+          type="file"
+          accept="image/*"
+          ref={inputPhotoRef}
+          style={{ display: 'none' }}
+          onChange={handlePhoto}
+        />
+        <button
+          className="profilmed-avatar-edit"
+          onClick={() => inputPhotoRef.current.click()}
+          disabled={uploadEnCours}
+          style={{ border: 'none', cursor: 'pointer' }}
+        >
+          {uploadEnCours ? '…' : '✎'}
+        </button>
+      </div>
+
+      <h2>Dr. {profil.prenom} {profil.nom}</h2>
+        <p>{profil.specialite}</p>
+        <div className="badge-disponible" style={{ background: profil.statut === 'actif' ? '#EFF4FF' : '#FEE2E2', color: profil.statut === 'actif' ? '#2563EB' : '#B91C1C' }}>
+          <span className="dot" style={{ background: profil.statut === 'actif' ? '#2563EB' : '#B91C1C' }}></span>
+          {profil.statut === 'actif' ? 'Disponible' : 'Compte suspendu'}
+        </div>
+
+      {messageSucces && (
+        <p style={{ textAlign: 'center', color: '#15803D', fontSize: '13px', margin: '0 20px 12px 20px' }}>{messageSucces}</p>
+      )}
+
+      <div className="profilmed-section">
+        <h2 className="profilmed-section-titre">👤 Informations personnelles</h2>
+
+        <div className="profilmed-info-row">
+          <div className="profilmed-info-row-texte">
+            <label>Nom complet</label>
+            <span>{profil.prenom} {profil.nom}</span>
+          </div>
+          <button className="profilmed-edit-btn" onClick={() => ouvrirDemande('nom_complet', 'Nom complet', `${profil.prenom} ${profil.nom}`)}>
+            Demander
+          </button>
+        </div>
+
+        <div className="profilmed-info-row">
+          <div className="profilmed-info-row-texte">
+            <label>Email</label>
+            <span>{profil.email}</span>
+          </div>
+        </div>
+
+        <div className="profilmed-info-row">
+          <div className="profilmed-info-row-texte" style={{ flex: 1 }}>
+            <label>Téléphone (modifiable directement)</label>
+            <input
+              value={telephone}
+              onChange={(e) => setTelephone(e.target.value)}
+              style={{ width: '100%', border: '1px solid #E5E9F0', borderRadius: '8px', padding: '8px 10px', fontSize: '14px', marginTop: '4px' }}
+            />
+          </div>
+        </div>
+
+        <div className="profilmed-info-row">
+          <div className="profilmed-info-row-texte">
+            <label>Licence professionnelle</label>
+            <span>{profil.licence || 'Non renseignée'} (modifiable par l'admin uniquement)</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="profilmed-section">
+        <h2 className="profilmed-section-titre">✚ Ma pratique</h2>
+
+        <div className="profilmed-info-row">
+          <div className="profilmed-info-row-texte">
+            <label>Spécialité</label>
+            <span>{profil.specialite}</span>
+          </div>
+          <button className="profilmed-edit-btn" onClick={() => ouvrirDemande('specialite', 'Spécialité', profil.specialite)}>
+            Demander
+          </button>
+        </div>
+
+        <div className="profilmed-info-row">
+          <div className="profilmed-info-row-texte">
+            <label>Lieu d'exercice</label>
+            <span>{profil.hopital || 'Non renseigné'}</span>
+          </div>
+          <button className="profilmed-edit-btn" onClick={() => ouvrirDemande('hopital', "Lieu d'exercice", profil.hopital || '')}>
+            Demander
+          </button>
+        </div>
+
+        <div className="profilmed-info-row" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+          <label style={{ fontSize: '12px', color: '#9CA3AF', marginBottom: '6px' }}>Bio / présentation (modifiable directement)</label>
+          <textarea
+            rows={3}
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
+            style={{ width: '100%', border: '1px solid #E5E9F0', borderRadius: '8px', padding: '10px', fontSize: '14px', fontFamily: 'inherit', boxSizing: 'border-box' }}
+          />
+        </div>
+      </div>
+
+      <button
+        onClick={enregistrerDirect}
+        style={{ width: 'calc(100% - 40px)', margin: '0 20px 20px 20px', background: '#2563EB', color: 'white', border: 'none', borderRadius: '12px', padding: '14px', fontSize: '14px', fontWeight: 700, cursor: 'pointer' }}
+      >
+        Enregistrer les modifications
+      </button>
+
+      {demandes.length > 0 && (
+        <div className="profilmed-section">
+          <h2 className="profilmed-section-titre">📨 Mes demandes de modification</h2>
+          {demandes.map((d) => (
+            <div key={d.id} className="profilmed-info-row">
+              <div className="profilmed-info-row-texte">
+                <label>{d.champ}</label>
+                <span>{d.valeur_demandee}</span>
+              </div>
+              <span style={{
+                fontSize: '12px', fontWeight: 700, padding: '4px 10px', borderRadius: '20px',
+                background: d.statut === 'approuvee' ? '#DCFCE7' : d.statut === 'refusee' ? '#FEE2E2' : '#FEF3C7',
+                color: d.statut === 'approuvee' ? '#15803D' : d.statut === 'refusee' ? '#B91C1C' : '#B45309',
+              }}>
+                {d.statut === 'en_attente' ? 'En attente' : d.statut === 'approuvee' ? 'Approuvée' : 'Refusée'}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="action-card-med" onClick={() => navigate('/disponibilites')} style={{ cursor: 'pointer' }}>
+        <div className="action-icone-med">🕐</div>
+        <div className="action-texte-med">
+          <h3>Disponibilités</h3>
+          <p>Gérer vos horaires de consultation</p>
+        </div>
+        <span>›</span>
+      </div>
+
+      <button className="btn-deconnexion-med" onClick={handleLogout}>
+        ⇥ Déconnexion
+      </button>
+
+      {modalDemande && (
+        <div className="modal-overlay-tarif" onClick={() => setModalDemande(null)}>
+          <div className="modal-tarif" onClick={(e) => e.stopPropagation()}>
+            <h3>Demander une modification : {modalDemande.label}</h3>
+            <label>Valeur actuelle</label>
+            <input value={modalDemande.valeurActuelle} disabled style={{ background: '#F1F3F6' }} />
+            <label>Nouvelle valeur souhaitée</label>
+            <input value={valeurDemandee} onChange={(e) => setValeurDemandee(e.target.value)} />
+            {erreurDemande && <p style={{ color: 'red', fontSize: '13px', marginTop: '8px' }}>{erreurDemande}</p>}
+            <div className="modal-tarif-actions">
+              <button className="btn-annuler-modal" onClick={() => setModalDemande(null)}>Annuler</button>
+              <button className="btn-enregistrer-modal" onClick={envoyerDemande}>Envoyer la demande</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="bottom-nav">
+        <button className="nav-item" onClick={() => navigate('/dashboard-medecin')}>📊<span>Tableau</span></button>
+        <button className="nav-item" onClick={() => navigate('/rendez-vous-medecin')}>📅<span>Agenda</span></button>
+        <button className="nav-item" onClick={() => navigate('/patients-medecin')}>👥<span>Patients</span></button>
+        <button className="nav-item active">👤<span>Profil</span></button>
+      </div>
+    </div>
+  );
 }
 
 export default ProfilMedecin;

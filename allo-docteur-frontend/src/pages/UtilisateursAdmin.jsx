@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from '../api/axios';
+import { useNavigate } from 'react-router-dom';
 import AdminSidebar from '../components/AdminSidebar';
 import './UtilisateursAdmin.css';
 import '../pages/DashboardAdmin.css';
@@ -15,6 +16,7 @@ function UtilisateursAdmin() {
     const [roleFiltre, setRoleFiltre] = useState('tous');
     const [statutFiltre, setStatutFiltre] = useState('tous');
     const [chargement, setChargement] = useState(true);
+    const navigate = useNavigate();
 
 
 
@@ -167,6 +169,9 @@ function UtilisateursAdmin() {
                                                 </span>
                                             </td>
                                             <td>
+                                                <button className="btn-nouvel-utilisateur" onClick={() => navigate('/demandes-admin')} style={{ background: '#F1F3F6', color: '#374151', marginRight: '10px' }}>
+                                                    📨 Demandes en attente
+                                                </button>
                                                 <button className="action-menu-btn" onClick={() => toggleStatut(u)} title={u.actif ? 'Bloquer' : 'Activer'}>
                                                     ⋮
                                                 </button>

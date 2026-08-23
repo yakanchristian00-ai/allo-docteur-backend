@@ -130,7 +130,9 @@ function DashboardPatient() {
                     <span className="article-tag">Nouveau conseil</span>
                     <h3>Les bienfaits du régime méditerranéen</h3>
                     <p>Découvrez comment adapter votre alimentation pour améliorer votre santé.</p>
-                    <a href="#" className="article-link">Lire l'article →</a>
+                    <a onClick={() => navigate('/conseils')} className="article-link" style={{ cursor: 'pointer' }}>
+                      Lire l'article →
+                    </a>
                 </div>
             </div>
 

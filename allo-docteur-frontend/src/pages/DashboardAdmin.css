@@ -301,12 +301,16 @@
     color: #1A1F36;
 }
 
-.table-card-top a {
+.table-card-top button {
+    background: none;
+    border: none;
     color: #2563EB;
     font-size: 14px;
     font-weight: 600;
+    font-family: inherit;
     text-decoration: none;
     cursor: pointer;
+    padding: 0;
 }
 
 .admin-table {

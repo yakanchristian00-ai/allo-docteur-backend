@@ -78,10 +78,12 @@ function Conseils() {
                 </div>
             ))}
 
-            <div className="programme-banner">
-                <h2>Programme Minceur</h2>
-                <p>Accédez à votre menu personnalisé pour la semaine prochaine.</p>
-                <button className="btn-programme">Consulter mon menu</button>
+           <div className="programme-banner">
+             <h2>Programme Minceur</h2>
+             <p>Accédez à votre menu personnalisé pour la semaine prochaine.</p>
+             <button className="btn-programme" onClick={() => setCategorieActive('perte_de_poids')}>
+                Consulter mon menu
+             </button>
             </div>
 
             <div className="bottom-nav">

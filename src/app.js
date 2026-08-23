@@ -15,6 +15,8 @@ const tarifsRoutes = require('./routes/tarifs.routes');
 const moderationRoutes = require('./routes/moderation.routes');
 const parametresRoutes = require('./routes/parametres.routes');
 const abonnementsRoutes = require('./routes/abonnements.routes');
+const profilMedecinRoutes = require('./routes/profil-medecin.routes');
+const disponibilitesRoutes = require('./routes/disponibilites.routes');
 
 const app = express();
 
@@ -35,6 +37,8 @@ app.use('/api/tarifs', tarifsRoutes);
 app.use('/api/moderation', moderationRoutes);
 app.use('/api/parametres', parametresRoutes);
 app.use('/api/abonnements', abonnementsRoutes);
+app.use('/api/profil-medecin', profilMedecinRoutes);
+app.use('/api/disponibilites', disponibilitesRoutes);
 
 app.get('/', (req, res) => {
     res.json({ message: 'API Allo Docteur en ligne' });
