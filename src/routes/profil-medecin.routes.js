@@ -3,7 +3,7 @@ const router = express.Router();
 const pool = require('../config/db');
 const authMiddleware = require('../middleware/auth.middleware');
 const multer = require('multer');
-const path = require('path');
+const path = require('node:path');
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, path.join(__dirname, '../../uploads')),
   filename: (req, file, cb) => cb(null, `photo-${Date.now()}-${file.originalname}`),
@@ -148,6 +148,18 @@ router.put('/:userId/admin', authMiddleware, adminOnly, async (req, res) => {
   const { nom, prenom, telephone, photo_url, specialite, licence, bio, hopital, statut } = req.body;
 
   try {
+    // Vérifie si la licence change, pour tracer l'historique
+    const medecinActuel = await pool.query('SELECT licence FROM medecins WHERE user_id = $1', [userId]);
+    const ancienneLicence = medecinActuel.rows[0]?.licence;
+
+    if (ancienneLicence !== licence) {
+      await pool.query(
+        `INSERT INTO historique_licences (medecin_user_id, ancienne_licence, nouvelle_licence, modifie_par_id)
+         VALUES ($1, $2, $3, $4)`,
+        [userId, ancienneLicence, licence, req.user.id]
+      );
+    }
+
     await pool.query(
       'UPDATE users SET nom = $1, prenom = $2, telephone = $3, photo_url = $4 WHERE id = $5',
       [nom, prenom, telephone, photo_url, userId]
@@ -176,6 +188,59 @@ router.post('/photo', authMiddleware, upload.single('photo'), async (req, res) =
     const url = `/uploads/${req.file.filename}`;
     await pool.query('UPDATE users SET photo_url = $1 WHERE id = $2', [url, req.user.id]);
     res.json({ message: 'Photo mise à jour', photo_url: url });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+// ADMIN : historique des changements de licence d'un médecin
+router.get('/:userId/historique-licence', authMiddleware, adminOnly, async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const result = await pool.query(
+      `SELECT h.*, u.nom AS modifie_par_nom, u.prenom AS modifie_par_prenom
+       FROM historique_licences h
+       LEFT JOIN users u ON h.modifie_par_id = u.id
+       WHERE h.medecin_user_id = $1
+       ORDER BY h.date_modification DESC`,
+      [userId]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+// ADMIN : historique complet de TOUTES les modifications de TOUS les médecins
+router.get('/audit/historique-complet', authMiddleware, adminOnly, async (req, res) => {
+  try {
+    const licences = await pool.query(`
+      SELECT h.id, 'licence' AS type, h.medecin_user_id, u.nom, u.prenom,
+             h.ancienne_licence AS ancienne_valeur, h.nouvelle_licence AS nouvelle_valeur,
+             mu.nom AS modifie_par_nom, mu.prenom AS modifie_par_prenom,
+             h.date_modification AS date_action
+      FROM historique_licences h
+      JOIN users u ON h.medecin_user_id = u.id
+      LEFT JOIN users mu ON h.modifie_par_id = mu.id
+    `);
+
+    const demandes = await pool.query(`
+      SELECT d.id, 'demande_' || d.statut AS type, d.medecin_user_id, u.nom, u.prenom,
+             d.champ AS ancienne_valeur, d.valeur_demandee AS nouvelle_valeur,
+             NULL AS modifie_par_nom, NULL AS modifie_par_prenom,
+             COALESCE(d.date_traitement, d.date_demande) AS date_action
+      FROM demandes_modification d
+      JOIN users u ON d.medecin_user_id = u.id
+      WHERE d.statut != 'en_attente'
+    `);
+
+    const tout = [...licences.rows, ...demandes.rows].sort(
+      (a, b) => new Date(b.date_action) - new Date(a.date_action)
+    );
+
+    res.json(tout);
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: 'Erreur serveur' });

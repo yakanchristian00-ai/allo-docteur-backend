@@ -4,12 +4,8 @@ import useParametresPublic from '../hooks/useParametresPublic';
 import './DashboardPatient.css';
 import api from '../api/axios';
 
-
 function DashboardPatient() {
-    const [user] = useState(() => {
-        const storedUser = localStorage.getItem('user');
-        return storedUser ? JSON.parse(storedUser) : null;
-    });
+    const [user, setUser] = useState(null);
     const [urgenceActive, setUrgenceActive] = useState(null);
     const navigate = useNavigate();
     const { parametresPublic } = useParametresPublic();
@@ -24,10 +20,13 @@ function DashboardPatient() {
     }, [user]);
 
     useEffect(() => {
-        if (!user) {
+        const storedUser = localStorage.getItem('user');
+        if (!storedUser) {
             navigate('/login');
+            return;
         }
-    }, [navigate, user]);
+        setUser(JSON.parse(storedUser));
+    }, [navigate]);
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -51,15 +50,15 @@ function DashboardPatient() {
                 <p>Voici le récapitulatif de votre santé aujourd'hui.</p>
             </div>
 
-            {parametresPublic.urgences_actives ? (
+            {parametresPublic.urgences_actives && !parametresPublic.maintenance ? (
                 <button className="btn-urgence" onClick={() => navigate('/urgence')}>
                     Urgence
                 </button>
             ) : (
                 <button disabled className="btn-disabled">
-                    Urgences indisponibles
+                    {parametresPublic.maintenance ? 'Urgences suspendues (maintenance)' : 'Urgences indisponibles'}
                 </button>
-            )}  
+            )}
 
             {urgenceActive && (
                 <div className="card" style={{ borderLeft: '4px solid #EF4444' }}>
@@ -69,9 +68,9 @@ function DashboardPatient() {
                         <p style={{ color: '#B45309', fontSize: '13px', margin: 0 }}>⏳ En attente de prise en charge</p>
                     )}
                     {urgenceActive.statut === 'prise_en_charge' && (
-                            <p style={{ color: '#15803D', fontSize: '13px', margin: 0 }}>
-                                ✓ Prise en charge par Dr. {urgenceActive.medecin_prenom} {urgenceActive.medecin_nom}
-                            </p>
+                        <p style={{ color: '#15803D', fontSize: '13px', margin: 0 }}>
+                            ✓ Prise en charge par Dr. {urgenceActive.medecin_prenom} {urgenceActive.medecin_nom}
+                        </p>
                     )}
                 </div>
             )}
@@ -131,7 +130,7 @@ function DashboardPatient() {
                     <h3>Les bienfaits du régime méditerranéen</h3>
                     <p>Découvrez comment adapter votre alimentation pour améliorer votre santé.</p>
                     <a onClick={() => navigate('/conseils')} className="article-link" style={{ cursor: 'pointer' }}>
-                      Lire l'article →
+                        Lire l'article →
                     </a>
                 </div>
             </div>

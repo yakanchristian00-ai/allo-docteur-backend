@@ -79,7 +79,7 @@ function UtilisateursAdmin() {
                     <div className="admin-search">🔍 Rechercher...</div>
                     <div className="admin-topbar-right">
                         <NotificationBell />
-                        <button>❓</button>
+                        <button type="button">❓</button>
                     </div>
                 </div>
 
@@ -89,7 +89,7 @@ function UtilisateursAdmin() {
                             <h1>Gestion des Utilisateurs</h1>
                             <p>Gérez les profils, les rôles et les accès à la plateforme.</p>
                         </div>
-                        <button className="btn-nouvel-utilisateur" onClick={() => setModalNouveauMedecin(true)}>+ Nouvel Utilisateur</button>                    </div>
+                        <button type="button" className="btn-nouvel-utilisateur" onClick={() => setModalNouveauMedecin(true)}>+ Nouvel Utilisateur</button>                    </div>
 
                     <div className="users-stats-row">
                         <div className="users-stat-card">
@@ -169,12 +169,27 @@ function UtilisateursAdmin() {
                                                 </span>
                                             </td>
                                             <td>
-                                                <button className="btn-nouvel-utilisateur" onClick={() => navigate('/demandes-admin')} style={{ background: '#F1F3F6', color: '#374151', marginRight: '10px' }}>
-                                                    📨 Demandes en attente
+                                                <button type="button" className="btn-nouvel-utilisateur" onClick={() => navigate('/demandes-admin')} style={{ background: '#F1F3F6', color: '#374151', marginRight: '10px' }}>
+                                                  📨 Demandes en attente
                                                 </button>
-                                                <button className="action-menu-btn" onClick={() => toggleStatut(u)} title={u.actif ? 'Bloquer' : 'Activer'}>
+                                                <button type="button" className="btn-nouvel-utilisateur" onClick={() => navigate('/demandes-admin')} style={{ background: '#F1F3F6', color: '#374151', marginRight: '10px' }}>
+                                                  📋 Audit médecins 
+                                                </button>
+                                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                  <button type="button" className="action-menu-btn" onClick={() => toggleStatut(u)} title={u.actif ? 'Bloquer' : 'Activer'}>
                                                     ⋮
-                                                </button>
+                                                   </button>
+                                                   {u.role === 'medecin' && (
+                                                                                                                <button
+                                                                                                                    type="button"
+                                                                                                                    onClick={() => navigate(`/historique-licence/${u.id}`)}
+                                                          style={{ background: '#EFF4FF', color: '#2563EB', border: 'none', borderRadius: '8px', padding: '6px 10px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}
+                                                        >
+                                                          Licence
+                                                        </button>
+                                                    )}
+                                                </div>
+                                                
                                             </td>
                                         </tr>
                                     ))}
@@ -188,29 +203,29 @@ function UtilisateursAdmin() {
                     </div>
                 </div>
                 {modalNouveauMedecin && (
-                    <div className="modal-overlay-tarif" onClick={() => setModalNouveauMedecin(false)}>
-                        <div className="modal-tarif" onClick={(e) => e.stopPropagation()}>
-                            <h3>Créer un compte médecin</h3>
-                            <label>Nom</label>
-                            <input value={nouveauMedecin.nom} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, nom: e.target.value })} />
-                            <label>Prénom</label>
-                            <input value={nouveauMedecin.prenom} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, prenom: e.target.value })} />
-                            <label>Email</label>
-                            <input type="email" value={nouveauMedecin.email} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, email: e.target.value })} />
-                            <label>Téléphone</label>
-                            <input value={nouveauMedecin.telephone} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, telephone: e.target.value })} />
-                            <label>Mot de passe temporaire</label>
-                            <input type="password" value={nouveauMedecin.mot_de_passe} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, mot_de_passe: e.target.value })} />
-                            <label>Spécialité</label>
-                            <input value={nouveauMedecin.specialite} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, specialite: e.target.value })} />
-                            <label>Numéro de licence</label>
-                            <input value={nouveauMedecin.licence} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, licence: e.target.value })} />
+                    <div className="modal-overlay-tarif" role="button" tabIndex="0" onClick={() => setModalNouveauMedecin(false)} onKeyDown={(e) => e.key === 'Escape' && setModalNouveauMedecin(false)}>
+                        <div className="modal-tarif" role="dialog" aria-modal="true" aria-labelledby="nouveau-medecin-titre" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+                            <h3 id="nouveau-medecin-titre">Créer un compte médecin</h3>
+                            <label htmlFor="nouveau-medecin-nom">Nom</label>
+                            <input id="nouveau-medecin-nom" value={nouveauMedecin.nom} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, nom: e.target.value })} />
+                            <label htmlFor="nouveau-medecin-prenom">Prénom</label>
+                            <input id="nouveau-medecin-prenom" value={nouveauMedecin.prenom} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, prenom: e.target.value })} />
+                            <label htmlFor="nouveau-medecin-email">Email</label>
+                            <input id="nouveau-medecin-email" type="email" value={nouveauMedecin.email} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, email: e.target.value })} />
+                            <label htmlFor="nouveau-medecin-telephone">Téléphone</label>
+                            <input id="nouveau-medecin-telephone" value={nouveauMedecin.telephone} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, telephone: e.target.value })} />
+                            <label htmlFor="nouveau-medecin-mot-de-passe">Mot de passe temporaire</label>
+                            <input id="nouveau-medecin-mot-de-passe" type="password" value={nouveauMedecin.mot_de_passe} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, mot_de_passe: e.target.value })} />
+                            <label htmlFor="nouveau-medecin-specialite">Spécialité</label>
+                            <input id="nouveau-medecin-specialite" value={nouveauMedecin.specialite} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, specialite: e.target.value })} />
+                            <label htmlFor="nouveau-medecin-licence">Numéro de licence</label>
+                            <input id="nouveau-medecin-licence" value={nouveauMedecin.licence} onChange={(e) => setNouveauMedecin({ ...nouveauMedecin, licence: e.target.value })} />
 
                             {erreurCreation && <p style={{ color: 'red', fontSize: '13px', marginTop: '10px' }}>{erreurCreation}</p>}
 
                             <div className="modal-tarif-actions">
-                                <button className="btn-annuler-modal" onClick={() => setModalNouveauMedecin(false)}>Annuler</button>
-                                <button className="btn-enregistrer-modal" onClick={creerMedecin}>Créer le compte</button>
+                                <button type="button" className="btn-annuler-modal" onClick={() => setModalNouveauMedecin(false)}>Annuler</button>
+                                <button type="button" className="btn-enregistrer-modal" onClick={creerMedecin}>Créer le compte</button>
                             </div>
                         </div>
                     </div>

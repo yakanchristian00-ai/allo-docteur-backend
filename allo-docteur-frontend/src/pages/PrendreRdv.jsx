@@ -92,6 +92,35 @@ function PrendreRdv() {
 
     const creneauxDisponibles = genererCreneauxDisponibles();
 
+    let contenuMedecins;
+    if (chargementMedecins) {
+        contenuMedecins = <p style={{ color: '#6B7280', fontSize: '14px' }}>Chargement des praticiens...</p>;
+    } else if (medecins.length === 0) {
+        contenuMedecins = <p style={{ color: '#6B7280', fontSize: '14px' }}>Aucun médecin disponible pour le moment.</p>;
+    } else {
+        contenuMedecins = (
+            <div className="medecins-scroll">
+                {medecins.map((m) => (
+                    <button
+                        type="button"
+                        key={m.id}
+                        className={`medecin-card ${medecinSelectionne === m.id ? 'selected' : ''}`}
+                        onClick={() => { setMedecinSelectionne(m.id); setHoraireSelectionne(''); }}
+                    >
+                        <div className="medecin-top">
+                            <div className="medecin-avatar">👨‍⚕️</div>
+                            <div className="medecin-info">
+                                <h3>Dr. {m.prenom} {m.nom}</h3>
+                                <p>{m.specialite || 'Médecin Généraliste'}</p>
+                            </div>
+                        </div>
+                        <div className="medecin-slot">📅 Disponible aujourd'hui</div>
+                    </button>
+                ))}
+            </div>
+        );
+    }
+
     const handleConfirmer = async () => {
         if (!medecinSelectionne) {
             setErreur('Veuillez sélectionner un médecin.');
@@ -125,13 +154,13 @@ function PrendreRdv() {
         <div className="rdv-page">
             <div className="rdv-header">
                 <h1>Prendre un RDV</h1>
-                <div className="rdv-avatar" title="Retour au Dashboard" onClick={() => navigate('/dashboard-patient')}>🏠</div>
+                <button type="button" className="rdv-avatar" title="Retour au Dashboard" onClick={() => navigate('/dashboard-patient')}>🏠</button>
             </div>
 
             <div className="rdv-section">
                 <h2>Quelle spécialité recherchez-vous ?</h2>
                 <div className="rdv-search">
-                    🔍
+                    <span aria-hidden="true">🔍</span>
                     <select disabled defaultValue="all">
                         <option value="all">Toutes spécialités</option>
                     </select>
@@ -144,30 +173,7 @@ function PrendreRdv() {
                 </div>
                 {erreur && <p style={{ color: '#DC2626', fontSize: '13px', margin: '6px 0' }}>{erreur}</p>}
 
-                {chargementMedecins ? (
-                    <p style={{ color: '#6B7280', fontSize: '14px' }}>Chargement des praticiens...</p>
-                ) : medecins.length === 0 ? (
-                    <p style={{ color: '#6B7280', fontSize: '14px' }}>Aucun médecin disponible pour le moment.</p>
-                ) : (
-                    <div className="medecins-scroll">
-                        {medecins.map((m) => (
-                            <div
-                                key={m.id}
-                                className={`medecin-card ${medecinSelectionne === m.id ? 'selected' : ''}`}
-                                onClick={() => { setMedecinSelectionne(m.id); setHoraireSelectionne(''); }}
-                            >
-                                <div className="medecin-top">
-                                    <div className="medecin-avatar">👨‍⚕️</div>
-                                    <div className="medecin-info">
-                                        <h3>Dr. {m.prenom} {m.nom}</h3>
-                                        <p>{m.specialite || 'Médecin Généraliste'}</p>
-                                    </div>
-                                </div>
-                                <div className="medecin-slot">📅 Disponible aujourd'hui</div>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                {contenuMedecins}
             </div>
 
             <div className="rdv-section">
@@ -175,6 +181,7 @@ function PrendreRdv() {
                 <div className="dates-scroll">
                     {dates.map((d) => (
                         <button
+                            type="button"
                             key={d.iso}
                             className={`date-chip ${dateSelectionnee === d.iso ? 'selected' : ''}`}
                             onClick={() => { setDateSelectionnee(d.iso); setHoraireSelectionne(''); }}
@@ -194,6 +201,7 @@ function PrendreRdv() {
                     <div className="horaires-grid">
                         {creneauxDisponibles.map((h) => (
                             <button
+                                type="button"
                                 key={h}
                                 className={`horaire-chip ${horaireSelectionne === h ? 'selected' : ''}`}
                                 onClick={() => setHoraireSelectionne(h)}
@@ -221,24 +229,24 @@ function PrendreRdv() {
                 </p>
             )}
 
-            <button className="btn-confirmer" onClick={handleConfirmer} disabled={chargement || !medecinSelectionne || !horaireSelectionne}>
+            <button type="button" className="btn-confirmer" onClick={handleConfirmer} disabled={chargement || !medecinSelectionne || !horaireSelectionne}>
                 ✓ {chargement ? 'Confirmation...' : 'Confirmer le rendez-vous'}
             </button>
 
             <div className="bottom-nav">
-                <button className="nav-item" onClick={() => navigate('/dashboard-patient')}>
+                <button type="button" className="nav-item" onClick={() => navigate('/dashboard-patient')}>
                     <span className="nav-icon">🏠</span>
                     <span className="nav-label">Accueil</span>
                 </button>
-                <button className="nav-item active" onClick={() => navigate('/mes-rendez-vous')}>
+                <button type="button" className="nav-item active" onClick={() => navigate('/mes-rendez-vous')}>
                     <span className="nav-icon">📅</span>
                     <span className="nav-label">Mes RDV</span>
                 </button>
-                <button className="nav-item" onClick={() => navigate('/messages')}>
+                <button type="button" className="nav-item" onClick={() => navigate('/messages')}>
                     <span className="nav-icon">💬</span>
                     <span className="nav-label">Messages</span>
                 </button>
-                <button className="nav-item" onClick={() => navigate('/urgence')}>
+                <button type="button" className="nav-item" onClick={() => navigate('/urgence')}>
                     <span className="nav-icon">🆘</span>
                     <span className="nav-label">Urgence</span>
                 </button>

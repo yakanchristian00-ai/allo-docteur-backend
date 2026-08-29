@@ -14,6 +14,8 @@ function DashboardMedecin() {
     const [user, setUser] = useState(null);
     const [urgences, setUrgences] = useState([]);
     const [rendezVous, setRendezVous] = useState([]);
+    const [specialite, setSpecialite] = useState('');
+
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -25,11 +27,17 @@ function DashboardMedecin() {
 
         api.get('/urgences').then((res) => setUrgences(res.data)).catch(() => setUrgences([]));
         api.get('/rendez-vous/medecin/mes-rendez-vous').then((res) => setRendezVous(res.data)).catch(() => setRendezVous([]));
+        api.get('/profil-medecin/moi').then((res) => setSpecialite(res.data.specialite)).catch(() => {});
     }, [navigate]);
 
     if (!user) return null;
 
     const urgenceCritique = urgences.find((u) => u.gravite === 'critique') || urgences[0];
+    const statutLabels = {
+        en_attente: 'En attente',
+        confirme: 'Confirmé',
+        termine: 'Terminé',
+    };
 
     return (
         <div className="dashmed-page">
@@ -41,23 +49,23 @@ function DashboardMedecin() {
                         <p>Dr. {user.prenom} {user.nom}</p>
                     </div>
                 </div>
-                <button className="dashmed-bell"><Bell size={20} /></button>
+                <button type="button" className="dashmed-bell"><Bell size={20} /></button>
             </div>
 
             <div className="dashmed-greeting">
-                <p className="dashmed-specialite">Cardiologue</p>
+                <p className="dashmed-specialite">{specialite || 'Spécialité non renseignée'}</p>
                 <h2>Bonjour, Dr. {user.prenom}</h2>
             </div>
 
             {urgences.length > 0 && (
-                <div className="urgence-banner" onClick={() => navigate('/urgences-medecin')}>
+                <button type="button" className="urgence-banner" onClick={() => navigate('/urgences-medecin')}>
                     <div className="urgence-banner-icone"><AlertTriangle size={20} /></div>
                     <div className="urgence-banner-texte">
                         <h3>{urgences.length} Urgence{urgences.length > 1 ? 's' : ''} en attente</h3>
                         <p>{urgenceCritique?.position || 'Position non précisée'} — Cas {urgenceCritique?.gravite}</p>
                     </div>
                     <span className="urgence-banner-chevron">›</span>
-                </div>
+                </button>
             )}
 
             <div className="stats-row">
@@ -81,7 +89,7 @@ function DashboardMedecin() {
 
             <div className="rdv-jour-header">
                 <h2>Rendez-vous du jour</h2>
-                <a onClick={() => navigate('/rendez-vous-medecin')}>Voir tout</a>
+                <button type="button" onClick={() => navigate('/rendez-vous-medecin')}>Voir tout</button>
             </div>
 
             {rendezVous.length === 0 && (
@@ -96,11 +104,12 @@ function DashboardMedecin() {
                         <p><Clock size={12} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{new Date(r.date_rdv).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} — {r.motif || 'Consultation'}</p>
                     </div>
                     <span className={`rdvmed-statut ${r.statut}`}>
-                        {r.statut === 'en_attente' ? 'En attente' : r.statut === 'confirme' ? 'Confirmé' : r.statut === 'termine' ? 'Terminé' : 'Annulé'}
+                        {statutLabels[r.statut] || 'Annulé'}
                     </span>
                 </div>
             ))}
-             <button
+                         <button
+                             type="button"
                onClick={() => navigate('/gestion-conseils')}
                style={{
                  display: 'flex',
@@ -123,10 +132,10 @@ function DashboardMedecin() {
             </button>           
 
             <div className="bottom-nav">
-                <button className="nav-item active">📊<span>Tableau</span></button>
-                <button className="nav-item" onClick={() => navigate('/rendez-vous-medecin')}>📅<span>Calendrier</span></button>
-                <button className="nav-item" onClick={() => navigate('/patients-medecin')}>👥<span>Patients</span></button>
-                <button className="nav-item" onClick={() => navigate('/profil-medecin')}>👤<span>Profil</span></button>
+                <button type="button" className="nav-item active">📊<span>Tableau</span></button>
+                <button type="button" className="nav-item" onClick={() => navigate('/rendez-vous-medecin')}>📅<span>Calendrier</span></button>
+                <button type="button" className="nav-item" onClick={() => navigate('/patients-medecin')}>👥<span>Patients</span></button>
+                <button type="button" className="nav-item" onClick={() => navigate('/profil-medecin')}>👤<span>Profil</span></button>
             </div>
         </div>
     );

@@ -105,6 +105,12 @@ function ProfilMedecin() {
 
   if (chargement || !profil) return null;
 
+  const demandeStyle = {
+    approuvee: { background: '#DCFCE7', color: '#15803D' },
+    refusee: { background: '#FEE2E2', color: '#B91C1C' },
+  };
+  const statutLabels = { en_attente: 'En attente', approuvee: 'Approuvée', refusee: 'Refusée' };
+
 
   return (
     <div className="profilmed-page">
@@ -113,14 +119,14 @@ function ProfilMedecin() {
           <div className="profilmed-topbar-avatar">👨‍⚕️</div>
           <h1>Allo Docteur</h1>
         </div>
-        <button>🔔</button>
+        <button type="button">🔔</button>
       </div>
 
       <div className="profilmed-avatar-wrapper">
         {profil.photo_url ? (
          <img
           src={`http://localhost:5000${profil.photo_url}`}
-          alt="Photo de profil"
+          alt="Profil du médecin"
           className="profilmed-avatar-grande"
           style={{ objectFit: 'cover' }}
          />
@@ -135,6 +141,7 @@ function ProfilMedecin() {
           onChange={handlePhoto}
         />
         <button
+          type="button"
           className="profilmed-avatar-edit"
           onClick={() => inputPhotoRef.current.click()}
           disabled={uploadEnCours}
@@ -160,25 +167,26 @@ function ProfilMedecin() {
 
         <div className="profilmed-info-row">
           <div className="profilmed-info-row-texte">
-            <label>Nom complet</label>
+            <span>Nom complet  </span>
             <span>{profil.prenom} {profil.nom}</span>
           </div>
-          <button className="profilmed-edit-btn" onClick={() => ouvrirDemande('nom_complet', 'Nom complet', `${profil.prenom} ${profil.nom}`)}>
+          <button type="button" className="profilmed-edit-btn" onClick={() => ouvrirDemande('nom_complet', 'Nom complet', `${profil.prenom} ${profil.nom}`)}>
             Demander
           </button>
         </div>
 
         <div className="profilmed-info-row">
           <div className="profilmed-info-row-texte">
-            <label>Email</label>
+            <span>Email  </span>
             <span>{profil.email}</span>
           </div>
         </div>
 
         <div className="profilmed-info-row">
           <div className="profilmed-info-row-texte" style={{ flex: 1 }}>
-            <label>Téléphone (modifiable directement)</label>
+            <label htmlFor="profilmed-telephone">Téléphone (modifiable directement)</label>
             <input
+              id="profilmed-telephone"
               value={telephone}
               onChange={(e) => setTelephone(e.target.value)}
               style={{ width: '100%', border: '1px solid #E5E9F0', borderRadius: '8px', padding: '8px 10px', fontSize: '14px', marginTop: '4px' }}
@@ -188,7 +196,7 @@ function ProfilMedecin() {
 
         <div className="profilmed-info-row">
           <div className="profilmed-info-row-texte">
-            <label>Licence professionnelle</label>
+            <span>Licence professionnelle  </span>
             <span>{profil.licence || 'Non renseignée'} (modifiable par l'admin uniquement)</span>
           </div>
         </div>
@@ -199,27 +207,28 @@ function ProfilMedecin() {
 
         <div className="profilmed-info-row">
           <div className="profilmed-info-row-texte">
-            <label>Spécialité</label>
+            <span>Spécialité  </span>
             <span>{profil.specialite}</span>
           </div>
-          <button className="profilmed-edit-btn" onClick={() => ouvrirDemande('specialite', 'Spécialité', profil.specialite)}>
+          <button type="button" className="profilmed-edit-btn" onClick={() => ouvrirDemande('specialite', 'Spécialité', profil.specialite)}>
             Demander
           </button>
         </div>
 
         <div className="profilmed-info-row">
           <div className="profilmed-info-row-texte">
-            <label>Lieu d'exercice</label>
+            <span>Lieu d'exercice  </span>
             <span>{profil.hopital || 'Non renseigné'}</span>
           </div>
-          <button className="profilmed-edit-btn" onClick={() => ouvrirDemande('hopital', "Lieu d'exercice", profil.hopital || '')}>
+          <button type="button" className="profilmed-edit-btn" onClick={() => ouvrirDemande('hopital', "Lieu d'exercice", profil.hopital || '')}>
             Demander
           </button>
         </div>
 
         <div className="profilmed-info-row" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
-          <label style={{ fontSize: '12px', color: '#9CA3AF', marginBottom: '6px' }}>Bio / présentation (modifiable directement)</label>
+          <label htmlFor="profilmed-bio" style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '6px' }}>Bio / présentation (modifiable directement)</label>
           <textarea
+            id="profilmed-bio"
             rows={3}
             value={bio}
             onChange={(e) => setBio(e.target.value)}
@@ -229,6 +238,7 @@ function ProfilMedecin() {
       </div>
 
       <button
+        type="button"
         onClick={enregistrerDirect}
         style={{ width: 'calc(100% - 40px)', margin: '0 20px 20px 20px', background: '#2563EB', color: 'white', border: 'none', borderRadius: '12px', padding: '14px', fontSize: '14px', fontWeight: 700, cursor: 'pointer' }}
       >
@@ -241,56 +251,55 @@ function ProfilMedecin() {
           {demandes.map((d) => (
             <div key={d.id} className="profilmed-info-row">
               <div className="profilmed-info-row-texte">
-                <label>{d.champ}</label>
+                <span>{d.champ}</span>
                 <span>{d.valeur_demandee}</span>
               </div>
               <span style={{
                 fontSize: '12px', fontWeight: 700, padding: '4px 10px', borderRadius: '20px',
-                background: d.statut === 'approuvee' ? '#DCFCE7' : d.statut === 'refusee' ? '#FEE2E2' : '#FEF3C7',
-                color: d.statut === 'approuvee' ? '#15803D' : d.statut === 'refusee' ? '#B91C1C' : '#B45309',
+                ...(demandeStyle[d.statut] || { background: '#FEF3C7', color: '#B45309' }),
               }}>
-                {d.statut === 'en_attente' ? 'En attente' : d.statut === 'approuvee' ? 'Approuvée' : 'Refusée'}
+                {statutLabels[d.statut] || 'Refusée'}
               </span>
             </div>
           ))}
         </div>
       )}
 
-      <div className="action-card-med" onClick={() => navigate('/disponibilites')} style={{ cursor: 'pointer' }}>
+      <button type="button" className="action-card-med" onClick={() => navigate('/disponibilites')} style={{ cursor: 'pointer' }}>
         <div className="action-icone-med">🕐</div>
         <div className="action-texte-med">
           <h3>Disponibilités</h3>
           <p>Gérer vos horaires de consultation</p>
         </div>
         <span>›</span>
-      </div>
+      </button>
 
-      <button className="btn-deconnexion-med" onClick={handleLogout}>
+      <button type="button" className="btn-deconnexion-med" onClick={handleLogout}>
         ⇥ Déconnexion
       </button>
 
       {modalDemande && (
-        <div className="modal-overlay-tarif" onClick={() => setModalDemande(null)}>
-          <div className="modal-tarif" onClick={(e) => e.stopPropagation()}>
-            <h3>Demander une modification : {modalDemande.label}</h3>
-            <label>Valeur actuelle</label>
-            <input value={modalDemande.valeurActuelle} disabled style={{ background: '#F1F3F6' }} />
-            <label>Nouvelle valeur souhaitée</label>
-            <input value={valeurDemandee} onChange={(e) => setValeurDemandee(e.target.value)} />
+        <dialog className="modal-overlay-tarif" open aria-labelledby="modal-demande-titre" onCancel={() => setModalDemande(null)} onClick={(e) => e.target === e.currentTarget && setModalDemande(null)}>
+          <div className="modal-tarif">
+            <h3 id="modal-demande-titre">Demander une modification : {modalDemande.label}</h3>
+            <label htmlFor="modal-valeur-actuelle">Valeur actuelle</label>
+            <input id="modal-valeur-actuelle" value={modalDemande.valeurActuelle} disabled style={{ background: '#F1F3F6' }} />
+            <label htmlFor="modal-valeur-demandee">Nouvelle valeur souhaitée</label>
+            <input id="modal-valeur-demandee" value={valeurDemandee} onChange={(e) => setValeurDemandee(e.target.value)} />
             {erreurDemande && <p style={{ color: 'red', fontSize: '13px', marginTop: '8px' }}>{erreurDemande}</p>}
             <div className="modal-tarif-actions">
-              <button className="btn-annuler-modal" onClick={() => setModalDemande(null)}>Annuler</button>
-              <button className="btn-enregistrer-modal" onClick={envoyerDemande}>Envoyer la demande</button>
+              <button type="button" className="btn-annuler-modal" onClick={() => setModalDemande(null)}>Annuler</button>
+              <button type="button" className="btn-enregistrer-modal" onClick={envoyerDemande}>Envoyer la demande</button>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
 
       <div className="bottom-nav">
-        <button className="nav-item" onClick={() => navigate('/dashboard-medecin')}>📊<span>Tableau</span></button>
-        <button className="nav-item" onClick={() => navigate('/rendez-vous-medecin')}>📅<span>Agenda</span></button>
-        <button className="nav-item" onClick={() => navigate('/patients-medecin')}>👥<span>Patients</span></button>
-        <button className="nav-item active">👤<span>Profil</span></button>
+        <button type="button" className="nav-item" onClick={() => navigate('/dashboard-medecin')}>📊<span>Tableau</span></button>
+        <button type="button" className="nav-item" onClick={() => navigate('/rendez-vous-medecin')}>📅<span>Agenda</span></button>
+        <button type="button" className="nav-item" onClick={() => navigate('/patients-medecin')}>👥<span>Patients</span></button>
+        <button type="button" className="nav-item active">👤<span>Profil</span></button>
       </div>
     </div>
   );

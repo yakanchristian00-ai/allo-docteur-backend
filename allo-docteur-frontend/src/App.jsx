@@ -24,7 +24,8 @@ import GestionConseils from './pages/GestionConseils';
 import DemandesAdmin from './pages/DemandesAdmin';
 import StatistiquesDetaillees from './pages/StatistiquesDetaillees';
 import Disponibilites from './pages/Disponibilites';
-
+import HistoriqueLicence from './pages/HistoriqueLicence';
+import AuditMedecins from './pages/AuditMedecins';
 function App() {
   return (
     <BrowserRouter>
@@ -55,6 +56,8 @@ function App() {
         <Route path="/demandes-admin" element={<DemandesAdmin />} />
         <Route path="/statistiques-detaillees" element={<StatistiquesDetaillees />} />
         <Route path="/disponibilites" element={<Disponibilites />} />
+        <Route path="historique-licence/:userId" element={<HistoriqueLicence />} />
+        <Route path="/audit-medecins" element={<AuditMedecins />} />
       </Routes>
     </BrowserRouter>
   );
