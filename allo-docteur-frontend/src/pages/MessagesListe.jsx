@@ -69,7 +69,11 @@ function MessagesListe() {
                 onClick={() => navigate(`/messages/${c.contact_id}`)}
               >
                 <div className="avatar-wrapper">
-                  <div className="avatar-fallback">{c.contact_role === 'medecin' ? '👨‍⚕️' : '🙂'}</div>
+                  {c.contact_photo_url ? (
+                    <img src={`http://localhost:5000/api/fichiers${c.contact_photo_url.replace('/uploads', '')}?token=${localStorage.getItem('token')}`} alt="Contact" className="avatar-fallback" style={{ objectFit: 'cover' }} />
+                  ) : (
+                    <div className="avatar-fallback">{c.contact_role === 'medecin' ? '👨‍⚕️' : '🙂'}</div>
+                  )}
                   <span className="online-indicator"></span>
                 </div>
                 <div className="conversation-content">

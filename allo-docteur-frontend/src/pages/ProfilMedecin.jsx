@@ -125,7 +125,7 @@ function ProfilMedecin() {
       <div className="profilmed-avatar-wrapper">
         {profil.photo_url ? (
          <img
-          src={`http://localhost:5000${profil.photo_url}`}
+          src={`http://localhost:5000/api/fichiers${profil.photo_url.replace('/uploads', '')}?token=${localStorage.getItem('token')}`}
           alt="Profil du médecin"
           className="profilmed-avatar-grande"
           style={{ objectFit: 'cover' }}

@@ -93,7 +93,11 @@ function MessageChat() {
       <div className="chat-header">
         <button className="chat-back" onClick={() => navigate(user.role === 'medecin' ? '/patients-medecin' : '/messages')}>←</button>
         <div className="chat-avatar-wrapper">
-          <div className="chat-avatar">{contact?.contact_role === 'medecin' ? '👨‍⚕️' : '🙂'}</div>
+          {contact?.contact_photo_url ? (
+            <img src={`http://localhost:5000/api/fichiers${contact.contact_photo_url.replace('/uploads', '')}?token=${localStorage.getItem('token')}`} alt="Contact" className="chat-avatar" style={{ objectFit: 'cover' }} />
+          ) : (
+            <div className="chat-avatar">{contact?.contact_role === 'medecin' ? '👨‍⚕️' : '🙂'}</div>
+          )}
           <span className="online-badge"></span>
         </div>
         <div className="chat-header-info">
@@ -112,7 +116,7 @@ function MessageChat() {
         {messages.map((m) => {
           const estMoi = m.expediteur_id === user.id;
           const estImage = m.piece_jointe_url && /\.(jpg|jpeg|png|gif|webp)$/i.test(m.piece_jointe_url);
-          const urlComplete = m.piece_jointe_url ? `http://localhost:5000${m.piece_jointe_url}` : null;
+          const urlComplete = m.piece_jointe_url ? `http://localhost:5000/api/fichiers${m.piece_jointe_url.replace('/uploads', '')}?token=${localStorage.getItem('token')}` : null;
 
           return (
             <div key={m.id} className={`bulle-wrapper ${estMoi ? 'moi' : 'autre'}`}>

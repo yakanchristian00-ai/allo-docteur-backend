@@ -3,10 +3,15 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pool = require('../config/db');
+const authMiddleware = require('../middleware/auth.middleware');
 
 // INSCRIPTION
 router.post('/register', async (req, res) => {
     const { nom, prenom, email, telephone, mot_de_passe } = req.body;
+
+    if (!mot_de_passe || mot_de_passe.length < 8 || !/[0-9]/.test(mot_de_passe) || !/[A-Za-z]/.test(mot_de_passe)) {
+        return res.status(400).json({ message: 'Le mot de passe doit contenir au moins 8 caractères, avec lettres et chiffres.' });
+    }
 
     try {
         const existingUser = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
@@ -65,13 +70,39 @@ router.post('/login', async (req, res) => {
                 nom: user.nom,
                 prenom: user.prenom,
                 email: user.email,
-                role: user.role
+                role: user.role,
+                photo_url: user.photo_url
             }
         });
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ message: 'Erreur serveur' });
     }
+
+});
+// Changer son propre mot de passe
+router.put('/changer-mot-de-passe', authMiddleware, async (req, res) => {
+  const { ancien_mot_de_passe, nouveau_mot_de_passe } = req.body;
+
+  if (nouveau_mot_de_passe.length < 8 || !/[0-9]/.test(nouveau_mot_de_passe) || !/[A-Za-z]/.test(nouveau_mot_de_passe)) {
+  return res.status(400).json({ message: 'Le mot de passe doit contenir au moins 8 caractères, avec lettres et chiffres.' });
+}
+  try {
+    const user = await pool.query('SELECT mot_de_passe FROM users WHERE id = $1', [req.user.id]);
+    const validPassword = await bcrypt.compare(ancien_mot_de_passe, user.rows[0].mot_de_passe);
+
+    if (!validPassword) {
+      return res.status(400).json({ message: 'Ancien mot de passe incorrect' });
+    }
+
+    const hashedPassword = await bcrypt.hash(nouveau_mot_de_passe, 10);
+    await pool.query('UPDATE users SET mot_de_passe = $1 WHERE id = $2', [hashedPassword, req.user.id]);
+
+    res.json({ message: 'Mot de passe modifié avec succès' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
 });
 
 module.exports = router;

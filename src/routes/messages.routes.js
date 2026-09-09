@@ -99,6 +99,7 @@ router.get('/conversations', authMiddleware, async (req, res) => {
          u.nom AS contact_nom, 
          u.prenom AS contact_prenom,
          u.role AS contact_role,
+         u.photo_url AS contact_photo_url,
          med.specialite AS contact_specialite,
          m.contenu AS dernier_message,
          m.date_envoi AS date_dernier_message,

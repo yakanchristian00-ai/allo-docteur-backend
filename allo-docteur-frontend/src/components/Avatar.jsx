@@ -2,7 +2,7 @@ function Avatar({ photoUrl, emoji = '🙂', size = 40, style = {} }) {
   if (photoUrl) {
     return (
       <img
-        src={`http://localhost:5000${photoUrl}`}
+        src={`http://localhost:5000/api/fichiers${photoUrl.replace('/uploads', '')}?token=${localStorage.getItem('token')}`}
         alt="Avatar"
         style={{
           width: size,
